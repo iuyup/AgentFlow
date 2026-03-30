@@ -1,0 +1,23 @@
+flowchart TD
+    Start([START]) --> Dispatch{dispatch}
+
+    Dispatch -->|"Send(source_1)"| Mapper1["mapper\n(Source 1)"]
+    Dispatch -->|"Send(source_2)"| Mapper2["mapper\n(Source 2)"]
+    Dispatch -->|"Send(source_3)"| Mapper3["mapper\n(Source 3)"]
+    Dispatch -->|"Send(source_N)"| MapperN["mapper\n(Source N)"]
+
+    Mapper1 --> Reducer["reducer\n(Synthesize)"]
+    Mapper2 --> Reducer
+    Mapper3 --> Reducer
+    MapperN --> Reducer
+
+    Reducer --> End([END])
+
+    style Start fill:#2d9bf0,color:#fff
+    style End fill:#2d9bf0,color:#fff
+    style Dispatch fill:#f5a623,color:#fff
+    style Mapper1 fill:#7ed321,color:#fff
+    style Mapper2 fill:#7ed321,color:#fff
+    style Mapper3 fill:#7ed321,color:#fff
+    style MapperN fill:#7ed321,color:#fff
+    style Reducer fill:#9b59b6,color:#fff

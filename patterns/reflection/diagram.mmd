@@ -1,0 +1,12 @@
+flowchart TD
+    A([START]) --> B["write\n— Generate or revise draft —"]
+    B --> C["review\n— Critique draft & assign score —"]
+    C --> D{score >= 8.0\nOR\niterations >= max?}
+    D -- "Yes" --> E([END])
+    D -- "No → continue" --> B
+
+    style A fill:#2d6a4f,color:#fff
+    style B fill:#264653,color:#fff
+    style C fill:#e76f51,color:#fff
+    style D fill:#e9c46a,color:#000
+    style E fill:#2d6a4f,color:#fff

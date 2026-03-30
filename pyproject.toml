@@ -1,0 +1,26 @@
+[project]
+name = "agentflow"
+version = "0.1.0"
+description = "Multi-Agent collaboration design patterns built with LangGraph"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "langgraph>=1.1.0,<2.0",
+    "langchain-openai>=0.3.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["patterns"]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

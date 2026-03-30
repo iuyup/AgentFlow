@@ -1,0 +1,19 @@
+flowchart TD
+    START([START]) --> debate_round
+
+    debate_round["debate_round\n─────────────────\nEach debater argues\ntheir position,\nresponding to previous\narguments"]
+
+    debate_round --> moderator
+
+    moderator["moderator\n─────────────────\nReview all arguments,\nsummarize progress,\ndecide if consensus\nis reached"]
+
+    moderator --> check{Settled or\nmax rounds?}
+
+    check -->|"is_settled = True\nOR round >= max_rounds"| END([END])
+    check -->|"Needs more debate"| debate_round
+
+    style START fill:#2d6a4f,stroke:#1b4332,color:#fff
+    style END fill:#9d0208,stroke:#6a040f,color:#fff
+    style debate_round fill:#264653,stroke:#2a9d8f,color:#fff
+    style moderator fill:#e76f51,stroke:#f4a261,color:#fff
+    style check fill:#e9c46a,stroke:#f4a261,color:#000
