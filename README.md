@@ -20,13 +20,16 @@ AgentFlow gives you **proven patterns** you can study, adapt, and combine — ea
 
 | Pattern | Description | Key Technique | Status |
 |---------|-------------|---------------|--------|
-| [Reflection](patterns/reflection/) | Iterative self-improvement through write → review loops | Conditional looping | ✅ |
-| [Debate](patterns/debate/) | Multi-perspective deliberation with moderator synthesis | N-party coordination | ✅ |
-| [MapReduce](patterns/map_reduce/) | Parallel fan-out processing with result aggregation | LangGraph Send API | ✅ |
-| [Hierarchical](patterns/hierarchical/) | Manager decomposes tasks → Workers execute → Manager aggregates | Nested subgraphs + Send | ✅ |
-| [Voting](patterns/voting/) | Multiple agents independently vote, then aggregate | Broadcast fan-out | ✅ |
-| [GuardRail](patterns/guardrail/) | Primary agent + safety guard checkpoint | Approve/block/redirect routing | ✅ |
-| [RAG-Agent](patterns/rag_agent/) | Agent decides when to retrieve from knowledge base | Conditional retrieval loop | ✅ |
+| [Reflection](web/docs/patterns/reflection/) | Iterative self-improvement through write → review loops | Conditional looping | ✅ |
+| [Debate](web/docs/patterns/debate/) | Multi-perspective deliberation with moderator synthesis | N-party coordination | ✅ |
+| [MapReduce](web/docs/patterns/map_reduce/) | Parallel fan-out processing with result aggregation | LangGraph Send API | ✅ |
+| [Hierarchical](web/docs/patterns/hierarchical/) | Manager decomposes tasks → Workers execute → Manager aggregates | Nested subgraphs + Send | ✅ |
+| [Voting](web/docs/patterns/voting/) | Multiple agents independently vote, then aggregate | Broadcast fan-out | ✅ |
+| [GuardRail](web/docs/patterns/guardrail/) | Primary agent + safety guard checkpoint | Approve/block/redirect routing | ✅ |
+| [RAG-Agent](web/docs/patterns/rag_agent/) | Agent decides when to retrieve from knowledge base | Conditional retrieval loop | ✅ |
+| [Chain-of-Experts](web/docs/patterns/chain_of_experts/) | Task passes through specialized agents in sequence | Sequential routing | ✅ |
+| [Human-in-the-Loop](web/docs/patterns/human_in_the_loop/) | Key nodes wait for human confirmation | Interrupt + resume | ✅ |
+| [Swarm](web/docs/patterns/swarm/) | Decentralized multi-agent collaboration | Dynamic orchestration | ✅ |
 
 ## Quick Start
 
@@ -48,13 +51,19 @@ cp .env.example .env
 ### 3. Run any pattern
 
 ```bash
-python patterns/reflection/example.py
-python patterns/debate/example.py
-python patterns/map_reduce/example.py
-python patterns/hierarchical/example.py
-python patterns/voting/example.py
-python patterns/guardrail/example.py
-python patterns/rag_agent/example.py
+python -m agentflow.patterns.reflection.example
+python -m agentflow.patterns.debate.example
+python -m agentflow.patterns.map_reduce.example
+```
+
+### 4. Browse documentation
+
+```bash
+cd web
+pip install -r requirements.txt
+python sync_docs.py
+mkdocs serve
+# Visit http://localhost:8000
 ```
 
 ## Project Structure
@@ -68,10 +77,34 @@ agentflow/
 │   ├── hierarchical/      # Manager → Workers → aggregation
 │   ├── voting/            # Multi-agent voting + aggregation
 │   ├── guardrail/         # Primary + safety checkpoint
-│   └── rag_agent/         # Agent with conditional retrieval
+│   ├── rag_agent/         # Agent with conditional retrieval
+│   ├── chain_of_experts/  # Sequential expert routing
+│   ├── human_in_the_loop/ # Human interruption
+│   └── swarm/             # Decentralized orchestration
+├── web/                   # Documentation site (MkDocs)
+│   ├── docs/             # Documentation source
+│   ├── mkdocs.yml        # Site configuration
+│   └── sync_docs.py      # Pattern doc sync script
 ├── benchmarks/            # Performance comparison framework
-├── docs/                  # Documentation templates
 └── tasks/                 # Progress tracking
+```
+
+## Documentation Site
+
+The documentation site is built with **MkDocs + Material** and deployed at `web/`:
+
+```bash
+# Local preview
+cd web
+pip install -r requirements.txt
+python sync_docs.py    # Sync pattern docs
+mkdocs serve          # Visit http://localhost:8000
+
+# Build static site
+mkdocs build
+
+# Deploy to GitHub Pages
+mkdocs gh-deploy
 ```
 
 ## Requirements
@@ -98,7 +131,7 @@ OPENAI_API_KEY=your-key pytest patterns/ -m "not skipif"
 
 ## Contributing
 
-See [docs/PATTERN_TEMPLATE.md](docs/PATTERN_TEMPLATE.md) for the pattern documentation template.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ## License
 

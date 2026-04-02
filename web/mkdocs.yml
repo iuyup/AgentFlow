@@ -1,0 +1,92 @@
+# Project information
+site_name: AgentFlow
+site_description: Multi-Agent Collaboration Design Patterns with LangGraph
+site_author: AgentFlow Team
+site_url: https://agentflow.dev
+
+# Repository
+repo_name: agentflow
+repo_url: https://github.com/agentflow
+edit_uri: ""
+
+# Configuration
+theme:
+  name: material
+  language: en
+  font: false
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+# Markdown extensions
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - tables
+  - toc:
+      permalink: false
+
+# Plugins
+plugins:
+  - search:
+      lang:
+        - en
+        - zh
+
+# Extra CSS
+extra_css:
+  - stylesheets/extra.css
+
+# Extra JavaScript for Mermaid
+extra_javascript:
+  - javascripts/config.js
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+
+# Page tree
+nav:
+  - Home: index.md
+  - Patterns:
+    - patterns/reflection.md
+    - patterns/reflection_zh.md
+    - patterns/debate.md
+    - patterns/debate_zh.md
+    - patterns/map_reduce.md
+    - patterns/map_reduce_zh.md
+    - patterns/hierarchical.md
+    - patterns/hierarchical_zh.md
+    - patterns/voting.md
+    - patterns/voting_zh.md
+    - patterns/guardrail.md
+    - patterns/guardrail_zh.md
+    - patterns/rag_agent.md
+    - patterns/rag_agent_zh.md
+    - patterns/chain_of_experts.md
+    - patterns/chain_of_experts_zh.md
+    - patterns/human_in_the_loop.md
+    - patterns/human_in_the_loop_zh.md
+    - patterns/swarm.md
+    - patterns/swarm_zh.md
+  - Guide:
+    - guide/index.md
+    - guide/getting-started.md
+    - guide/selection.md
