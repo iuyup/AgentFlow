@@ -1,0 +1,16 @@
+graph TD
+    START --> broadcast{Broadcast to All Voters}
+    broadcast -->|Send| voter1[Voter 1<br/>CTO]
+    broadcast -->|Send| voter2[Voter 2<br/>Security]
+    broadcast -->|Send| voterN[Voter N<br/>DevOps]
+    voter1 --> aggregator[Aggregator]
+    voter2 --> aggregator
+    voterN --> aggregator
+    aggregator --> END
+
+    classDef voter fill:#fff3e0
+    classDef aggregator fill:#e8f5e9
+    classDef start_end fill:#f5f5f5,stroke:#999
+
+    class voter1,voter2,voterN voter
+    class aggregator aggregator

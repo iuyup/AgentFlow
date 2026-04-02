@@ -1,0 +1,18 @@
+graph TD
+    START --> primary[Primary Agent: Execute]
+    primary --> guard[Guard Agent: Check]
+    guard --> decision{Verdict?}
+    decision -->|APPROVE| finalize[Finalize Output]
+    decision -->|BLOCK| primary
+    decision -->|REDIRECT| primary
+    finalize --> END
+
+    classDef primary fill:#e3f2fd
+    classDef guard fill:#fff3e0
+    classDef decision fill:#f3e5f5
+    classDef finalize fill:#e8f5e9
+    classDef start_end fill:#f5f5f5,stroke:#999
+
+    class primary,finalize primary
+    class guard guard
+    class decision decision

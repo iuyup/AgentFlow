@@ -23,6 +23,10 @@ AgentFlow gives you **proven patterns** you can study, adapt, and combine — ea
 | [Reflection](patterns/reflection/) | Iterative self-improvement through write → review loops | Conditional looping | ✅ |
 | [Debate](patterns/debate/) | Multi-perspective deliberation with moderator synthesis | N-party coordination | ✅ |
 | [MapReduce](patterns/map_reduce/) | Parallel fan-out processing with result aggregation | LangGraph Send API | ✅ |
+| [Hierarchical](patterns/hierarchical/) | Manager decomposes tasks → Workers execute → Manager aggregates | Nested subgraphs + Send | ✅ |
+| [Voting](patterns/voting/) | Multiple agents independently vote, then aggregate | Broadcast fan-out | ✅ |
+| [GuardRail](patterns/guardrail/) | Primary agent + safety guard checkpoint | Approve/block/redirect routing | ✅ |
+| [RAG-Agent](patterns/rag_agent/) | Agent decides when to retrieve from knowledge base | Conditional retrieval loop | ✅ |
 
 ## Quick Start
 
@@ -47,6 +51,10 @@ cp .env.example .env
 python patterns/reflection/example.py
 python patterns/debate/example.py
 python patterns/map_reduce/example.py
+python patterns/hierarchical/example.py
+python patterns/voting/example.py
+python patterns/guardrail/example.py
+python patterns/rag_agent/example.py
 ```
 
 ## Project Structure
@@ -56,7 +64,12 @@ agentflow/
 ├── patterns/              # Core: one directory per pattern
 │   ├── reflection/        # Write → Review loop
 │   ├── debate/            # N-party debate + moderator
-│   └── map_reduce/        # Parallel fan-out + reduce
+│   ├── map_reduce/        # Parallel fan-out + reduce
+│   ├── hierarchical/      # Manager → Workers → aggregation
+│   ├── voting/            # Multi-agent voting + aggregation
+│   ├── guardrail/         # Primary + safety checkpoint
+│   └── rag_agent/         # Agent with conditional retrieval
+├── benchmarks/            # Performance comparison framework
 ├── docs/                  # Documentation templates
 └── tasks/                 # Progress tracking
 ```

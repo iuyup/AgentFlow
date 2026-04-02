@@ -1,0 +1,32 @@
+graph TD
+    START --> decompose[Manager: Decompose Task]
+    decompose --> dispatch{Dispatch Subtasks}
+    dispatch -->|Send| worker1[Worker 1]
+    dispatch -->|Send| worker2[Worker 2]
+    dispatch -->|Send| workerN[Worker N]
+    worker1 --> aggregate[Manager: Aggregate Results]
+    worker2 --> aggregate
+    workerN --> aggregate
+    aggregate --> END
+
+    subgraph worker_subgraph_1 ["Worker 1 Subgraph"]
+        W1_START([START]) --> W1_worker[Worker: Analyze Subtask]
+        W1_worker --> W1_END([END])
+    end
+
+    subgraph worker_subgraph_2 ["Worker 2 Subgraph"]
+        W2_START([START]) --> W2_worker[Worker: Analyze Subtask]
+        W2_worker --> W2_END([END])
+    end
+
+    subgraph worker_subgraph_N ["Worker N Subgraph"]
+        WN_START([START]) --> WN_worker[Worker: Analyze Subtask]
+        WN_worker --> WN_END([END])
+    end
+
+    classDef manager fill:#e1f5ff
+    classDef worker fill:#fff3e0
+    classDef start_end fill:#f5f5f5,stroke:#999
+
+    class decompose,aggregate manager
+    class worker1,worker2,workerN worker
