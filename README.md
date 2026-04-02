@@ -1,10 +1,14 @@
 # 🔀 AgentFlow
 
+[**简体中文**](README_zh.md) | **English**
+
 **Multi-Agent Collaboration Design Patterns with LangGraph**
 
 AgentFlow is a curated collection of battle-tested multi-agent design patterns built on [LangGraph](https://github.com/langchain-ai/langgraph). Each pattern includes complete code, architecture diagrams, use-case analysis, and performance comparisons.
 
 > **Not a framework.** Not a tutorial collection. This is a **design pattern reference book** for multi-agent systems.
+
+**Live Demo:** https://iuyup.github.io/AgentFlow
 
 ## Why AgentFlow?
 
@@ -36,8 +40,8 @@ AgentFlow gives you **proven patterns** you can study, adapt, and combine — ea
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/agentflow.git
-cd agentflow
+git clone https://github.com/iuyup/AgentFlow.git
+cd AgentFlow
 uv sync
 ```
 
