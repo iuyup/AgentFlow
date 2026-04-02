@@ -3,7 +3,7 @@
 All tests mock ChatOpenAI so they run without an API key.
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -98,14 +98,14 @@ def make_ai_message(content: str) -> MagicMock:
 
 def test_build_graph() -> None:
     """Graph builds without error and returns a compiled StateGraph."""
-    with patch("patterns.debate.pattern.ChatOpenAI"):
-        pattern = DebatePattern()
-        graph = pattern.build_graph()
-        # Compiled graph has .invoke
-        assert callable(graph.invoke)
-        # Check nodes are present
-        assert "debate_round" in graph.nodes
-        assert "moderator" in graph.nodes
+    mock_llm = MagicMock()
+    pattern = DebatePattern(llm=mock_llm)
+    graph = pattern.build_graph()
+    # Compiled graph has .invoke
+    assert callable(graph.invoke)
+    # Check nodes are present
+    assert "debate_round" in graph.nodes
+    assert "moderator" in graph.nodes
 
 
 def test_build_graph_with_custom_llm(two_debaters: list[dict]) -> None:

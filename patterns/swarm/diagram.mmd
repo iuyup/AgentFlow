@@ -1,0 +1,21 @@
+flowchart TD
+    A([START]) --> B["initialize\n— Task initiation —"]
+    B --> C["agent_turn\n— All agents contribute —"]
+    C --> D{More rounds?\nrounds < max_rounds?}
+    D -- "Yes" --> C
+    D -- "No" --> E["aggregator\n— Synthesize conclusions —"]
+    E --> F([END])
+
+    subgraph agents["Agent Collective"]
+        C1["Agent A"]
+        C2["Agent B"]
+        C3["Agent C"]
+    end
+
+    C --> agents
+    agents --> C
+
+    style A fill:#e1f5ff
+    style F fill:#e8f5e9
+    style B fill:#fff3e0
+    style E fill:#f3e5f5

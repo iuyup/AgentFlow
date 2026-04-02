@@ -9,26 +9,14 @@ Typical use cases:
   - Distributed data extraction with synthesis
 """
 
+from agentflow.utils import get_default_llm as _default_llm
+
 import operator
 from typing import Annotated, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-
-
-def _default_llm(model: str | None):
-    """Auto-detect provider and select appropriate default model."""
-    import os
-
-    if os.getenv("DEEPSEEK_API_KEY"):
-        from langchain_deepseek import ChatDeepSeek
-
-        return ChatDeepSeek(model=model or "deepseek-chat")
-    return ChatOpenAI(model=model or "gpt-4o-mini")
-
-
 from langgraph.types import Send
 
 

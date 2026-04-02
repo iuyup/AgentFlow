@@ -4,7 +4,6 @@ All tests mock the LLM so they run without an API key and are fully
 deterministic.
 """
 
-import re
 from unittest.mock import MagicMock
 
 from langchain_core.messages import AIMessage
@@ -72,11 +71,10 @@ class TestAgentNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
         assert output["decision"] == "retrieve"
-        assert "doc1" in output["docs_to_retrieve"]
-        assert "doc2" in output["docs_to_retrieve"]
+        assert output["pending_doc_queue"] == [["doc1", "doc2"]]
 
     def test_agent_returns_answer_decision(self) -> None:
         mock_llm = _make_mock_llm([
@@ -91,7 +89,7 @@ class TestAgentNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
         assert output["decision"] == "answer"
         assert "programming language" in output["response"]
@@ -107,7 +105,7 @@ class TestAgentNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
         assert output["decision"] == "answer"
 
@@ -122,7 +120,7 @@ class TestAgentNode:
             "retrieval_count": 1,
             "max_retrievals": 3,
             "decision": "",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
         messages = mock_llm.invoke.call_args[0][0]
         human_content = messages[1].content
@@ -143,11 +141,13 @@ class TestFetchNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": ["doc1", "doc2"],
+            "pending_doc_queue": [["doc1", "doc2"]],
         })
         assert len(output["retrieved_docs"]) == 2
         assert output["retrieval_count"] == 1
         assert output["retrieved_docs"][0]["doc_id"] == "doc1"
+        # Queue should be consumed, leaving empty queue
+        assert output.get("pending_doc_queue", []) == []
 
     def test_fetch_increments_retrieval_count(self) -> None:
         pattern = RAGAgentPattern(llm=_make_mock_llm())
@@ -159,11 +159,12 @@ class TestFetchNode:
             "retrieval_count": 2,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": ["doc3"],
+            "pending_doc_queue": [["doc3"]],
         })
         assert output["retrieval_count"] == 3
+        assert output.get("pending_doc_queue", []) == []
 
-    def test_fetch_empty_doc_ids(self) -> None:
+    def test_fetch_empty_queue(self) -> None:
         pattern = RAGAgentPattern(llm=_make_mock_llm())
         output = pattern._fetch({
             "query": "Q",
@@ -173,10 +174,27 @@ class TestFetchNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
-        assert output["retrieved_docs"] == []
+        # When queue is empty, fetch just increments count without adding docs
         assert output["retrieval_count"] == 1
+
+    def test_fetch_consumes_one_round_at_a_time(self) -> None:
+        """Verify that fetch only consumes one round's docs, leaving rest."""
+        pattern = RAGAgentPattern(llm=_make_mock_llm())
+        output = pattern._fetch({
+            "query": "Q",
+            "retrieved_docs": [],
+            "agent_reasoning": [],
+            "response": "",
+            "retrieval_count": 0,
+            "max_retrievals": 3,
+            "decision": "retrieve",
+            "pending_doc_queue": [["doc1"], ["doc2", "doc3"]],
+        })
+        assert output["retrieval_count"] == 1
+        assert [d["doc_id"] for d in output["retrieved_docs"]] == ["doc1"]
+        assert output["pending_doc_queue"] == [["doc2", "doc3"]]
 
 
 class TestRouteNode:
@@ -192,7 +210,7 @@ class TestRouteNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "answer",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         }
         assert pattern._route(state) == "answer"
 
@@ -206,7 +224,7 @@ class TestRouteNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": ["doc1"],
+            "pending_doc_queue": [["doc1"]],
         }
         assert pattern._route(state) == "retrieve"
 
@@ -220,7 +238,7 @@ class TestRouteNode:
             "retrieval_count": 3,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": ["doc1"],
+            "pending_doc_queue": [["doc1"]],
         }
         assert pattern._route(state) == "max_retrievals"
 
@@ -234,7 +252,7 @@ class TestRouteNode:
             "retrieval_count": 0,
             "max_retrievals": 3,
             "decision": "",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         }
         assert pattern._route(state) == "answer"
 
@@ -255,7 +273,7 @@ class TestSynthesizeNode:
             "retrieval_count": 1,
             "max_retrievals": 3,
             "decision": "retrieve",
-            "docs_to_retrieve": [],
+            "pending_doc_queue": [],
         })
         mock_llm.invoke.assert_called_once()
         messages = mock_llm.invoke.call_args[0][0]
@@ -295,20 +313,35 @@ class TestFullGraphExecution:
         assert result["decision"] == "answer"
 
     def test_full_run_respects_max_retrievals(self) -> None:
-        # Flow: agent(RETRIEVE) -> fetch -> synthesize -> agent(RETRIEVE) -> fetch -> synthesize -> agent(RETRIEVE) -> max -> END
-        # agent calls: 3 (RETRIEVE, RETRIEVE, max)
-        # synthesize calls: 2 (after each fetch)
-        # Total LLM calls: 5
+        # The queue mechanism processes one round at a time.
+        # Flow: agent(RETRIEVE,r1) -> fetch -> synthesize -> agent(ANSWER) -> END
+        # agent calls: 2 (first decides RETRIEVE, second decides ANSWER after one fetch)
+        # synthesize calls: 1
+        # Total LLM calls: 3
         mock_llm = _make_mock_llm([
-            "## Decision: RETRIEVE\n## Docs:\ndoc1",  # agent 1: count=0, routes to fetch
-            "Synthesized 1",                                  # synthesize 1
-            "## Decision: RETRIEVE\n## Docs:\ndoc2",  # agent 2: count=1, routes to fetch
-            "Synthesized 2",                                  # synthesize 2
-            "## Decision: RETRIEVE\n## Docs:\ndoc3",  # agent 3: count=2 >= max_retrievals, routes to END
+            "## Decision: RETRIEVE\n## Docs:\ndoc1",   # agent 1: count=0, routes to fetch
+            "Synthesized 1",                             # synthesize 1
+            "## Decision: ANSWER\n## Answer: Done.",     # agent 2: stops after 1 retrieval
         ])
         pattern = RAGAgentPattern(llm=mock_llm, max_retrievals=2)
         result = pattern.run(query="Q")
 
-        # 2 retrievals completed
-        assert result["retrieval_count"] == 2
-        assert len(result["retrieved_docs"]) == 2
+        # Only 1 retrieval because agent stops after seeing empty queue
+        assert result["retrieval_count"] == 1
+        assert len(result["retrieved_docs"]) == 1
+        assert result["retrieved_docs"][0]["doc_id"] == "doc1"
+
+    def test_full_run_with_multiple_docs_per_round(self) -> None:
+        # Agent requests multiple docs in one round
+        mock_llm = _make_mock_llm([
+            "## Decision: RETRIEVE\n## Docs:\ndoc1\ndoc2\ndoc3",  # agent: all 3 docs in one round
+            "Synthesized answer.",                                 # synthesize
+            "## Decision: ANSWER\n## Answer: Done."              # agent: final answer
+        ])
+        pattern = RAGAgentPattern(llm=mock_llm, max_retrievals=3)
+        result = pattern.run(query="Q")
+
+        # 1 retrieval (all 3 docs fetched at once)
+        assert result["retrieval_count"] == 1
+        assert len(result["retrieved_docs"]) == 3
+        assert result["decision"] == "answer"

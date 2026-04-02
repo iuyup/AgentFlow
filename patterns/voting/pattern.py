@@ -11,26 +11,15 @@ Typical use cases:
   - Risk assessment with multiple independent reviewers
 """
 
+from agentflow.utils import get_default_llm as _default_llm
+
 import operator
 from typing import Annotated, Literal, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-
 from langgraph.types import Send
-
-
-def _default_llm(model: str | None = None):
-    """Auto-detect provider and select appropriate default model."""
-    import os
-
-    if os.getenv("DEEPSEEK_API_KEY"):
-        from langchain_deepseek import ChatDeepSeek
-
-        return ChatDeepSeek(model=model or "deepseek-chat")
-    return ChatOpenAI(model=model or "gpt-4o-mini")
 
 
 # ---------------------------------------------------------------------------

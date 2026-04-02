@@ -9,25 +9,13 @@ Graph topology:
     START → debate_round → moderator → (continue?) → debate_round or END
 """
 
+from agentflow.utils import get_default_llm as _default_llm
+
 import operator
 from typing import Annotated, Literal, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
-
-
-def _default_llm(model: str | None):
-    """Auto-detect provider and select appropriate default model."""
-    import os
-
-    if os.getenv("DEEPSEEK_API_KEY"):
-        from langchain_deepseek import ChatDeepSeek
-
-        return ChatDeepSeek(model=model or "deepseek-chat")
-    return ChatOpenAI(model=model or "gpt-4o-mini")
-
-
 from langgraph.graph import END, START, StateGraph
 
 
@@ -176,10 +164,16 @@ class DebatePattern:
 
         # Parse the moderator's structured response
         summary = self._extract_section(text, "SUMMARY")
-        status = self._extract_section(text, "STATUS").strip().upper()
+        status_raw = self._extract_section(text, "STATUS")
         decision = self._extract_section(text, "DECISION")
 
+        # Robust status parsing: check for SETTLED/CONTINUE keyword
+        status = status_raw.strip().upper()
         is_settled = "SETTLED" in status
+
+        # If status is empty/malformed but max rounds reached, treat as settled
+        if not status_raw.strip() and state["current_round"] >= state["max_rounds"]:
+            is_settled = True
 
         result: dict = {
             "moderator_summary": summary,

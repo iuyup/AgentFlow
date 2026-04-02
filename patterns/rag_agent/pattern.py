@@ -11,25 +11,14 @@ Typical use cases:
   - Real-time information lookup during reasoning
 """
 
-import operator
+from agentflow.utils import get_default_llm as _default_llm
+
 import re
-from typing import Annotated, Literal, TypedDict
+from typing import Literal, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-
-
-def _default_llm(model: str | None = None):
-    """Auto-detect provider and select appropriate default model."""
-    import os
-
-    if os.getenv("DEEPSEEK_API_KEY"):
-        from langchain_deepseek import ChatDeepSeek
-
-        return ChatDeepSeek(model=model or "deepseek-chat")
-    return ChatOpenAI(model=model or "gpt-4o-mini")
 
 
 # ---------------------------------------------------------------------------
@@ -41,12 +30,15 @@ class RAGAgentState(TypedDict):
     """State for the RAG agent."""
 
     query: str
-    retrieved_docs: Annotated[list[dict], operator.add]
-    agent_reasoning: Annotated[list[str], operator.add]
+    retrieved_docs: list[dict]
+    agent_reasoning: list[str]
     response: str
     retrieval_count: int
     max_retrievals: int
     decision: Literal["", "retrieve", "answer"]
+    # Queue of doc IDs that the agent has requested in each round.
+    # agent appends a new round's doc IDs; fetch consumes from the front.
+    pending_doc_queue: list[list[str]]
 
 
 # ---------------------------------------------------------------------------
@@ -136,8 +128,6 @@ class RAGAgentPattern:
     ) -> None:
         self.llm = llm or _default_llm(model)
         self.max_retrievals = max_retrievals
-        # Shared context: docs requested by agent, used by fetch node
-        self._pending_docs: list[str] = []
 
     # -- Graph nodes -------------------------------------------------------
 
@@ -146,6 +136,7 @@ class RAGAgentPattern:
         query = state["query"]
         docs_so_far = state["retrieved_docs"]
         retrieval_count = state.get("retrieval_count", 0)
+        queue = state.get("pending_doc_queue", [])
 
         context = ""
         if docs_so_far:
@@ -175,7 +166,6 @@ class RAGAgentPattern:
         # Parse document IDs if RETRIEVE
         doc_ids = []
         if decision == "RETRIEVE":
-            # Handle both "## Documents: doc1 doc2" and "## Docs:\ndoc1\ndoc2"
             docs_section = re.search(
                 r"##\s*Docs?[^:]*:\s*\n?(.*?)(?=##|\Z)", content, re.DOTALL | re.IGNORECASE
             )
@@ -201,15 +191,18 @@ class RAGAgentPattern:
         )
         reasoning = reasoning_match.group(1).strip() if reasoning_match else ""
 
-        # Store pending docs in instance for fetch node to access
-        self._pending_docs = doc_ids
-
-        return {
+        result: dict = {
             "decision": decision.lower(),
-            "docs_to_retrieve": doc_ids,
             "response": answer,
             "agent_reasoning": [reasoning],
         }
+
+        # Append this round's requested doc IDs to the queue.
+        # fetch will consume from the front.
+        if doc_ids:
+            result["pending_doc_queue"] = queue + [doc_ids]
+
+        return result
 
     def _route(self, state: RAGAgentState) -> str:
         """Route based on agent's decision and retrieval count."""
@@ -223,26 +216,28 @@ class RAGAgentPattern:
             if count >= max_r:
                 return "max_retrievals"
             return "retrieve"
-        # Default: answer
         return "answer"
 
     def _fetch(self, state: RAGAgentState) -> dict:
-        """Fetch documents based on agent's request."""
-        # Use instance attribute set by agent node (workaround for state-passing issue)
-        doc_ids = self._pending_docs if self._pending_docs else state.get("docs_to_retrieve", [])
-        self._pending_docs = []  # Clear for next iteration
-        if not doc_ids:
-            return {
-                "retrieved_docs": [],
-                "retrieval_count": state["retrieval_count"] + 1,
-            }
+        """Fetch documents based on the oldest round's requested doc IDs."""
+        queue = state.get("pending_doc_queue", [])
+        if not queue:
+            return {"retrieval_count": state["retrieval_count"] + 1}
 
-        docs = _retrieve_docs(doc_ids)
+        # Consume the oldest round's doc IDs
+        current_round_docs = queue[0]
+        remaining_queue = queue[1:]
 
-        return {
+        docs = _retrieve_docs(current_round_docs)
+
+        result: dict = {
             "retrieved_docs": docs,
             "retrieval_count": state["retrieval_count"] + 1,
         }
+        if remaining_queue:
+            result["pending_doc_queue"] = remaining_queue
+
+        return result
 
     def _synthesize(self, state: RAGAgentState) -> dict:
         """Synthesize retrieved documents into context for the agent."""
@@ -308,7 +303,7 @@ class RAGAgentPattern:
                 "retrieval_count": 0,
                 "max_retrievals": max_r,
                 "decision": "",
-                "docs_to_retrieve": [],
+                "pending_doc_queue": [],
             }
         )
         return result

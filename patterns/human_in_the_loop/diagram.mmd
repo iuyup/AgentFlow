@@ -1,0 +1,13 @@
+flowchart TD
+    A([START]) --> B["primary_execute\n— Agent generates output —"]
+    B --> C["review\n— Human review checkpoint —"]
+    C --> D{Verdict?}
+    D -- "APPROVE" --> E([END])
+    D -- "REJECT" --> B
+    D -- "REDIRECT" --> B
+    D -- "MAX_ATTEMPTS" --> E
+
+    style A fill:#e1f5ff
+    style E fill:#e8f5e9
+    style C fill:#fff9c4
+    style D fill:#fff9c4

@@ -10,28 +10,15 @@ Typical use cases:
   - Multi-faceted content generation with centralized quality control
 """
 
+from agentflow.utils import get_default_llm as _default_llm
+
 import operator
 from typing import Annotated, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-
 from langgraph.types import Send
-
-
-def _default_llm(model: str | None = None):
-    """Auto-detect provider and select appropriate default model."""
-    import os
-
-    if os.getenv("DEEPSEEK_API_KEY"):
-        from langchain_deepseek import ChatDeepSeek
-
-        return ChatDeepSeek(model=model or "deepseek-chat")
-    return ChatOpenAI(model=model or "gpt-4o-mini")
-
-
 # ---------------------------------------------------------------------------
 # State schemas
 # ---------------------------------------------------------------------------
@@ -147,6 +134,8 @@ class HierarchicalPattern:
 
         # Parse the LLM response to extract subtasks
         content = response.content.strip()
+        subtasks = []
+
         # Try to find JSON array in response
         try:
             # Handle markdown code blocks
@@ -154,13 +143,29 @@ class HierarchicalPattern:
                 content = content.split("```json")[1].split("```")[0]
             elif "```" in content:
                 content = content.split("```")[1].split("```")[0]
-            subtasks = json.loads(content.strip())
+
+            # Try to extract JSON array with regex if raw JSON parsing fails
+            import re
+            json_match = re.search(r'\[[\s\S]*\]', content)
+            if json_match:
+                parsed = json.loads(json_match.group())
+                if isinstance(parsed, list) and len(parsed) > 0:
+                    subtasks = parsed
+
+            if not subtasks:
+                subtasks = json.loads(content.strip())
         except Exception:
-            # Fallback: split by lines and create simple subtasks
+            pass
+
+        # Fallback: parse meaningful lines if JSON parsing failed
+        if not subtasks:
             lines = [
                 line.strip()
                 for line in content.split("\n")
-                if line.strip() and not line.strip().startswith("#")
+                if line.strip()
+                and not line.strip().startswith("#")
+                and not line.strip().startswith("```")
+                and len(line.strip()) > 10
             ]
             subtasks = [
                 {
@@ -169,6 +174,16 @@ class HierarchicalPattern:
                     "objective": line,
                 }
                 for i, line in enumerate(lines[:5])
+            ]
+
+        # Final safety: if still empty, create a single fallback subtask
+        if not subtasks:
+            subtasks = [
+                {
+                    "task_id": "subtask_0",
+                    "title": "Main Task",
+                    "objective": state["task"],
+                }
             ]
 
         return {"decomposed_tasks": subtasks}

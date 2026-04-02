@@ -1,0 +1,14 @@
+flowchart LR
+    A([START]) --> B["expert_1\n— First expert analysis —"]
+    B --> C["expert_2\n— Second expert builds on first —"]
+    C --> D["..."]
+    D --> E["expert_N\n— Nth expert contribution —"]
+    E --> F["synthesizer\n— Final integration —"]
+    F --> G([END])
+
+    style A fill:#e1f5ff
+    style G fill:#e8f5e9
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style E fill:#fff3e0
+    style F fill:#f3e5f5
