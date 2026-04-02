@@ -36,6 +36,9 @@ Thumbs.db
 .coverage
 htmlcov/
 
+# MkDocs build output
+web/site/
+
 # uv
 uv.lock
 
