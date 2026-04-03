@@ -14,7 +14,15 @@ AgentFlow 是一套经过验证的多 Agent 设计模式合集，基于 [LangGra
 
 ## 架构概览
 
-![AgentFlow Overview](docs/hero.svg)
+![架构概览](docs/architecture-overview.svg)
+
+### 模式示例：Reflection（反思模式）
+
+![Reflection 模式](docs/pattern-reflection.svg)
+
+### 模式示例：MapReduce（映射归约模式）
+
+![MapReduce 模式](docs/pattern-mapreduce.svg)
 
 > **运行截图和演示：** 访问[文档网站](https://iuyup.github.io/AgentFlow)查看交互示例和运行截图。
 

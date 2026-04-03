@@ -14,7 +14,15 @@ AgentFlow is a curated collection of battle-tested multi-agent design patterns b
 
 ## Architecture Overview
 
-![AgentFlow Overview](docs/hero.svg)
+![Architecture Overview](docs/architecture-overview.svg)
+
+### Pattern: Reflection (Iterative Self-Improvement)
+
+![Reflection Pattern](docs/pattern-reflection.svg)
+
+### Pattern: MapReduce (Parallel Fan-Out)
+
+![MapReduce Pattern](docs/pattern-mapreduce.svg)
 
 > **Screenshots & demos:** See the [documentation site](https://iuyup.github.io/AgentFlow) for interactive examples and run screenshots.
 
