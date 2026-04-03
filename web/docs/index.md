@@ -145,43 +145,43 @@ description: Multi-Agent Collaboration Design Patterns with LangGraph
 
 ```mermaid
 flowchart TD
-    Start(["你的场景需要什么？"])
-    
-    Q1{是否需要人类<br/>介入确认？}
-    Q1-- 是 --> Hitl["👤 Human-in-the-Loop<br/>人机协作"]
-    Q1-- 否 --> Q2{任务是否<br/>复杂多面？}
-    
-    Q2-- 简单任务 --> Q3{是否需要<br/>检索增强？}
-    Q2-- 复杂任务 --> Q4{是否有安全<br/>合规要求？}
-    
-    Q3-- 是 --> RAG["📚 RAG-Agent<br/>检索增强"]
-    Q3-- 否 --> Q5{是否需要<br/>质量优化？}
-    
-    Q5-- 是 --> Refl["🔄 Reflection<br/>反思循环"]
-    Q5-- 否 --> Q6{是否需要<br/>多专家链式？}
-    
-    Q6-- 是 --> CoE["🔗 Chain-of-Experts<br/>专家链"]
-    Q6-- 否 --> Single["✓ 单 Agent<br/>无需模式"]
-    
-    Q4-- 是 --> Guard["🛡️ GuardRail<br/>风控守门"]
-    Q4-- 否 --> Q7{是否有层级<br/>管理结构？}
-    
-    Q7-- 是 --> Hier["📊 Hierarchical<br/>层级委派"]
-    Q7-- 否 --> Q8{是否需要<br/>并行处理？}
-    
-    Q8-- 是 --> MR["🗂️ MapReduce<br/>并行处理"]
-    Q8-- 否 --> Q9{是否有对立<br/>观点权衡？}
-    
-    Q9-- 是 --> Deb["⚔️ Debate<br/>辩论模式"]
-    Q9-- 否 --> Q10{是否需要<br/>投票决策？}
-    
-    Q10-- 是 --> Vot["🗳️ Voting<br/>投票决策"]
-    Q10-- 否 --> Swarm["🐝 Swarm<br/>群体智能"]
-    
+    Start(["What does your use case need?"])
+
+    Q1{Does it require<br/>human approval?}
+    Q1-- Yes --> Hitl["👤 Human-in-the-Loop"]
+    Q1-- No --> Q2{Is the task<br/>complex multi-faceted?}
+
+    Q2-- Simple task --> Q3{Does it need<br/>RAG?}
+    Q2-- Complex task --> Q4{Any safety or<br/>compliance needs?}
+
+    Q3-- Yes --> RAG["📚 RAG-Agent"]
+    Q3-- No --> Q5{Does it need<br/>quality improvement?}
+
+    Q5-- Yes --> Refl["🔄 Reflection"]
+    Q5-- No --> Q6{Does it need a<br/>chain of experts?}
+
+    Q6-- Yes --> CoE["🔗 Chain-of-Experts"]
+    Q6-- No --> Single["✓ Single Agent<br/>No pattern needed"]
+
+    Q4-- Yes --> Guard["🛡️ GuardRail"]
+    Q4-- No --> Q7{Any hierarchical<br/>management structure?}
+
+    Q7-- Yes --> Hier["📊 Hierarchical"]
+    Q7-- No --> Q8{Does it need<br/>parallel processing?}
+
+    Q8-- Yes --> MR["🗂️ MapReduce"]
+    Q8-- No --> Q9{Any competing<br/>viewpoints to weigh?}
+
+    Q9-- Yes --> Deb["⚔️ Debate"]
+    Q9-- No --> Q10{Does it need<br/>voting/coordination?}
+
+    Q10-- Yes --> Vot["🗳️ Voting"]
+    Q10-- No --> Swarm["🐝 Swarm"]
+
     class Start terminal
     class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10 decision
     class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard pattern
-    
+
     click Hitl href "/patterns/human_in_the_loop_zh/"
     click RAG href "/patterns/rag_agent_zh/"
     click Refl href "/patterns/reflection_zh/"
@@ -194,7 +194,7 @@ flowchart TD
     click Guard href "/patterns/guardrail_zh/"
 ```
 
-_点击模式名称可跳转到对应中文文档_
+_Click a pattern name to jump to its documentation_
 
 ## Patterns
 

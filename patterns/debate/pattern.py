@@ -106,6 +106,7 @@ class DebatePattern:
     ):
         self.llm = llm or _default_llm(model, counter_handler=counter_handler)
         self.max_rounds = max_rounds
+        self.counter_handler = counter_handler
 
     # ------------------------------------------------------------------
     # Node: debate round

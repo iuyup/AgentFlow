@@ -106,6 +106,7 @@ class VotingPattern:
         counter_handler: BaseCallbackHandler | None = None,
     ) -> None:
         self.llm = llm or _default_llm(model, counter_handler)
+        self.counter_handler = counter_handler
 
     # -- Graph nodes & edges ------------------------------------------------
 

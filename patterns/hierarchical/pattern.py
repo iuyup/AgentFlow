@@ -96,6 +96,7 @@ class HierarchicalPattern:
     ) -> None:
         self.llm = llm or _default_llm(model, counter_handler)
         self._worker_graph = self._build_worker_graph()
+        self.counter_handler = counter_handler
 
     # -- Worker subgraph (runs independently per subtask) --------------------
 

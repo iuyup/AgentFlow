@@ -79,6 +79,7 @@ class ChainOfExpertsPattern:
         counter_handler: BaseCallbackHandler | None = None,
     ):
         self.llm = llm or _default_llm(model, counter_handler)
+        self.counter_handler = counter_handler
 
     def _expert_node(self, state: ChainOfExpertsState) -> dict:
         """Each expert processes the task in sequence."""

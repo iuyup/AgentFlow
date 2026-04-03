@@ -98,6 +98,7 @@ class GuardRailPattern:
     ) -> None:
         self.llm = llm or _default_llm(model, counter_handler)
         self.max_attempts = max_attempts
+        self.counter_handler = counter_handler
 
     # -- Graph nodes -------------------------------------------------------
 

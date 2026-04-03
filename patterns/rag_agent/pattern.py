@@ -141,6 +141,7 @@ class RAGAgentPattern:
         self.llm = llm or _default_llm(model, counter_handler)
         self.max_retrievals = max_retrievals
         self.retriever = retriever or _retrieve_docs
+        self.counter_handler = counter_handler
 
     # -- Graph nodes -------------------------------------------------------
 

@@ -117,6 +117,7 @@ class ReflectionPattern:
         self.llm = llm or _default_llm(model, counter_handler)
         self.max_iterations = max_iterations
         self.score_threshold = score_threshold
+        self.counter_handler = counter_handler
 
     # -- graph nodes --------------------------------------------------------
 

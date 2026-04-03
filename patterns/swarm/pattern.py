@@ -94,6 +94,7 @@ class SwarmPattern:
     ):
         self.llm = llm or _default_llm(model, counter_handler=counter_handler)
         self.max_rounds = max_rounds
+        self.counter_handler = counter_handler
 
     def _initialize(self, state: SwarmState) -> dict:
         """Initialize the swarm with an opening statement."""

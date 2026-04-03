@@ -85,6 +85,7 @@ class HumanInTheLoopPattern:
     ):
         self.llm = llm or _default_llm(model, counter_handler)
         self.max_attempts = max_attempts
+        self.counter_handler = counter_handler
 
     def _primary_execute(self, state: HumanInTheLoopState) -> dict:
         """Primary agent generates output."""
