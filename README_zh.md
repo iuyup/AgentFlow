@@ -10,6 +10,8 @@ AgentFlow 是一套经过验证的多 Agent 设计模式合集，基于 [LangGra
 
 **在线演示：** https://iuyup.github.io/AgentFlow
 
+![AgentFlow Overview](docs/hero.svg)
+
 ## 架构概览
 
 ```

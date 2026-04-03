@@ -1,0 +1,307 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#111827"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#14b8a6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-lg">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="520" fill="url(#bg)"/>
+  
+  <!-- Grid pattern overlay -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+  </pattern>
+  <rect width="1200" height="520" fill="url(#grid)" opacity="0.4"/>
+
+  <!-- Decorative background circles -->
+  <circle cx="120" cy="260" r="200" fill="#14b8a6" opacity="0.03"/>
+  <circle cx="1080" cy="260" r="200" fill="#06b6d4" opacity="0.03"/>
+
+  <!-- Title area -->
+  <text x="600" y="52" text-anchor="middle" font-family="'SF Pro Display','Segoe UI',system-ui,sans-serif" font-size="36" font-weight="700" fill="#f1f5f9" letter-spacing="-0.5">🔀 AgentFlow</text>
+  <text x="600" y="80" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="14" fill="#64748b" letter-spacing="2">10 MULTI-AGENT DESIGN PATTERNS WITH LANGGRAPH</text>
+  
+  <!-- Divider line -->
+  <line x1="400" y1="96" x2="800" y2="96" stroke="url(#teal)" stroke-width="1" opacity="0.3"/>
+
+  <!-- ============ Row 1: 5 patterns ============ -->
+
+  <!-- Pattern 1: Reflection -->
+  <g transform="translate(36, 118)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#14b8a6">Reflection</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Write → Review Loop</text>
+    <!-- Graph: circular loop -->
+    <g transform="translate(102, 100)">
+      <!-- Nodes -->
+      <circle cx="-30" cy="0" r="14" fill="#0f172a" stroke="#14b8a6" stroke-width="1.5"/>
+      <text x="-30" y="4" text-anchor="middle" font-family="monospace" font-size="8" fill="#14b8a6">W</text>
+      <circle cx="30" cy="0" r="14" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
+      <text x="30" y="4" text-anchor="middle" font-family="monospace" font-size="8" fill="#06b6d4">R</text>
+      <!-- Arrows -->
+      <path d="M -16,0 L 16,0" stroke="#334155" stroke-width="1.2" marker-end="url(#arr)"/>
+      <path d="M 22,-12 C 10,-30 -10,-30 -22,-12" stroke="#334155" stroke-width="1.2" fill="none" stroke-dasharray="3,2"/>
+      <!-- Loop label -->
+      <text x="0" y="-28" text-anchor="middle" font-family="monospace" font-size="7" fill="#475569">loop</text>
+    </g>
+    <!-- Score badge -->
+    <rect x="72" y="136" width="60" height="16" rx="8" fill="#14b8a6" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#14b8a6">≥ 8/10 → END</text>
+  </g>
+
+  <!-- Pattern 2: Debate -->
+  <g transform="translate(264, 118)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Debate</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">N-Party Deliberation</text>
+    <!-- Graph: multiple debaters + moderator -->
+    <g transform="translate(102, 96)">
+      <circle cx="-40" cy="-12" r="11" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="-40" y="-8" text-anchor="middle" font-family="monospace" font-size="7" fill="#f59e0b">D1</text>
+      <circle cx="0" cy="-12" r="11" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="0" y="-8" text-anchor="middle" font-family="monospace" font-size="7" fill="#f59e0b">D2</text>
+      <circle cx="40" cy="-12" r="11" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="40" y="-8" text-anchor="middle" font-family="monospace" font-size="7" fill="#f59e0b">DN</text>
+      <!-- Moderator -->
+      <circle cx="0" cy="22" r="13" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+      <text x="0" y="26" text-anchor="middle" font-family="monospace" font-size="7" fill="#fbbf24">MOD</text>
+      <!-- Lines -->
+      <line x1="-35" y1="-2" x2="-5" y2="12" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="-1" x2="0" y2="9" stroke="#334155" stroke-width="1"/>
+      <line x1="35" y1="-2" x2="5" y2="12" stroke="#334155" stroke-width="1"/>
+    </g>
+    <rect x="60" y="136" width="84" height="16" rx="8" fill="#f59e0b" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#f59e0b">SETTLED → END</text>
+  </g>
+
+  <!-- Pattern 3: MapReduce -->
+  <g transform="translate(492, 118)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#8b5cf6">MapReduce</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Parallel Fan-out + Reduce</text>
+    <!-- Graph: fan-out / fan-in -->
+    <g transform="translate(102, 94)">
+      <!-- Source node -->
+      <circle cx="0" cy="-22" r="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="0" y="-18" text-anchor="middle" font-family="monospace" font-size="7" fill="#8b5cf6">S</text>
+      <!-- Workers -->
+      <circle cx="-40" cy="4" r="9" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2"/>
+      <text x="-40" y="8" text-anchor="middle" font-family="monospace" font-size="6" fill="#a78bfa">M1</text>
+      <circle cx="0" cy="4" r="9" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2"/>
+      <text x="0" y="8" text-anchor="middle" font-family="monospace" font-size="6" fill="#a78bfa">M2</text>
+      <circle cx="40" cy="4" r="9" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2"/>
+      <text x="40" y="8" text-anchor="middle" font-family="monospace" font-size="6" fill="#a78bfa">MN</text>
+      <!-- Reducer -->
+      <circle cx="0" cy="30" r="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="0" y="34" text-anchor="middle" font-family="monospace" font-size="7" fill="#8b5cf6">R</text>
+      <!-- Fan lines -->
+      <line x1="-5" y1="-13" x2="-35" y2="-3" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="-12" x2="0" y2="-5" stroke="#334155" stroke-width="1"/>
+      <line x1="5" y1="-13" x2="35" y2="-3" stroke="#334155" stroke-width="1"/>
+      <line x1="-35" y1="12" x2="-5" y2="22" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="13" x2="0" y2="20" stroke="#334155" stroke-width="1"/>
+      <line x1="35" y1="12" x2="5" y2="22" stroke="#334155" stroke-width="1"/>
+    </g>
+    <rect x="62" y="136" width="80" height="16" rx="8" fill="#8b5cf6" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#8b5cf6">Send API ⚡</text>
+  </g>
+
+  <!-- Pattern 4: Hierarchical -->
+  <g transform="translate(720, 118)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#ec4899">Hierarchical</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Manager → Workers</text>
+    <!-- Graph: tree -->
+    <g transform="translate(102, 92)">
+      <circle cx="0" cy="-22" r="12" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
+      <text x="0" y="-18" text-anchor="middle" font-family="monospace" font-size="7" fill="#ec4899">MGR</text>
+      <circle cx="-35" cy="8" r="9" fill="#0f172a" stroke="#f472b6" stroke-width="1.2"/>
+      <text x="-35" y="12" text-anchor="middle" font-family="monospace" font-size="6" fill="#f472b6">W1</text>
+      <circle cx="0" cy="8" r="9" fill="#0f172a" stroke="#f472b6" stroke-width="1.2"/>
+      <text x="0" y="12" text-anchor="middle" font-family="monospace" font-size="6" fill="#f472b6">W2</text>
+      <circle cx="35" cy="8" r="9" fill="#0f172a" stroke="#f472b6" stroke-width="1.2"/>
+      <text x="35" y="12" text-anchor="middle" font-family="monospace" font-size="6" fill="#f472b6">W3</text>
+      <line x1="-6" y1="-12" x2="-30" y2="1" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="-10" x2="0" y2="-1" stroke="#334155" stroke-width="1"/>
+      <line x1="6" y1="-12" x2="30" y2="1" stroke="#334155" stroke-width="1"/>
+      <!-- Aggregate arrow -->
+      <circle cx="0" cy="32" r="10" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
+      <text x="0" y="35" text-anchor="middle" font-family="monospace" font-size="6" fill="#ec4899">AGG</text>
+      <line x1="-30" y1="16" x2="-5" y2="24" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="17" x2="0" y2="22" stroke="#334155" stroke-width="1"/>
+      <line x1="30" y1="16" x2="5" y2="24" stroke="#334155" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- Pattern 5: Voting -->
+  <g transform="translate(948, 118)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#10b981">Voting</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Broadcast + Aggregate</text>
+    <!-- Graph: voting -->
+    <g transform="translate(102, 92)">
+      <circle cx="-35" cy="-10" r="9" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="-35" y="-6" text-anchor="middle" font-family="monospace" font-size="6" fill="#10b981">V1</text>
+      <circle cx="0" cy="-10" r="9" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="0" y="-6" text-anchor="middle" font-family="monospace" font-size="6" fill="#10b981">V2</text>
+      <circle cx="35" cy="-10" r="9" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+      <text x="35" y="-6" text-anchor="middle" font-family="monospace" font-size="6" fill="#10b981">V3</text>
+      <!-- Ballot box -->
+      <rect x="-18" y="12" width="36" height="24" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+      <text x="0" y="28" text-anchor="middle" font-family="monospace" font-size="8" fill="#34d399">🗳️</text>
+      <line x1="-30" y1="-1" x2="-12" y2="14" stroke="#334155" stroke-width="1"/>
+      <line x1="0" y1="-1" x2="0" y2="12" stroke="#334155" stroke-width="1"/>
+      <line x1="30" y1="-1" x2="12" y2="14" stroke="#334155" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- ============ Row 2: 5 patterns ============ -->
+
+  <!-- Pattern 6: GuardRail -->
+  <g transform="translate(36, 298)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#ef4444">GuardRail</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Safety Checkpoint</text>
+    <!-- Graph: primary → guard → approve/block -->
+    <g transform="translate(102, 95)">
+      <circle cx="-40" cy="0" r="12" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="-40" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#ef4444">PRI</text>
+      <rect x="-8" y="-14" width="40" height="28" rx="6" fill="#0f172a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="12" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#f87171">🛡️</text>
+      <!-- Approve -->
+      <text x="52" y="-6" font-family="monospace" font-size="7" fill="#22c55e">✓</text>
+      <!-- Block -->
+      <text x="52" y="10" font-family="monospace" font-size="7" fill="#ef4444">✗</text>
+      <line x1="-28" y1="0" x2="-8" y2="0" stroke="#334155" stroke-width="1"/>
+      <line x1="32" y1="-6" x2="46" y2="-6" stroke="#334155" stroke-width="1"/>
+      <line x1="32" y1="6" x2="46" y2="6" stroke="#334155" stroke-width="1"/>
+      <!-- Retry arrow -->
+      <path d="M 46,10 C 50,28 -50,28 -46,8" stroke="#ef4444" stroke-width="1" fill="none" stroke-dasharray="3,2" opacity="0.5"/>
+    </g>
+    <rect x="62" y="136" width="80" height="16" rx="8" fill="#ef4444" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#ef4444">block → retry</text>
+  </g>
+
+  <!-- Pattern 7: RAG-Agent -->
+  <g transform="translate(264, 298)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#3b82f6">RAG-Agent</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Conditional Retrieval</text>
+    <!-- Graph -->
+    <g transform="translate(102, 94)">
+      <circle cx="-30" cy="-8" r="12" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="-30" y="-4" text-anchor="middle" font-family="monospace" font-size="7" fill="#3b82f6">AGT</text>
+      <!-- DB icon -->
+      <ellipse cx="30" cy="-14" rx="14" ry="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1.2"/>
+      <rect x="16" y="-14" width="28" height="14" fill="#0f172a" stroke="#60a5fa" stroke-width="1.2"/>
+      <ellipse cx="30" cy="0" rx="14" ry="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1.2"/>
+      <text x="30" y="-4" text-anchor="middle" font-family="monospace" font-size="6" fill="#60a5fa">KB</text>
+      <!-- Arrows -->
+      <line x1="-18" y1="-8" x2="16" y2="-8" stroke="#334155" stroke-width="1"/>
+      <!-- Decide label -->
+      <text x="-5" y="-14" text-anchor="middle" font-family="monospace" font-size="6" fill="#475569">retrieve?</text>
+      <!-- Answer -->
+      <circle cx="-30" cy="22" r="10" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="-30" y="26" text-anchor="middle" font-family="monospace" font-size="6" fill="#3b82f6">ANS</text>
+      <line x1="-30" y1="4" x2="-30" y2="12" stroke="#334155" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- Pattern 8: Chain-of-Experts -->
+  <g transform="translate(492, 298)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#f97316">Chain-of-Experts</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Sequential Routing</text>
+    <!-- Graph: chain -->
+    <g transform="translate(102, 96)">
+      <circle cx="-55" cy="0" r="11" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+      <text x="-55" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#f97316">E1</text>
+      <circle cx="-5" cy="0" r="11" fill="#0f172a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="-5" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#fb923c">E2</text>
+      <circle cx="45" cy="0" r="11" fill="#0f172a" stroke="#fdba74" stroke-width="1.5"/>
+      <text x="45" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#fdba74">E3</text>
+      <!-- Arrows -->
+      <line x1="-44" y1="0" x2="-16" y2="0" stroke="#334155" stroke-width="1.2"/>
+      <line x1="6" y1="0" x2="34" y2="0" stroke="#334155" stroke-width="1.2"/>
+      <!-- Arrow heads -->
+      <polygon points="-18,0 -22,-3 -22,3" fill="#334155"/>
+      <polygon points="32,0 28,-3 28,3" fill="#334155"/>
+    </g>
+    <rect x="52" y="136" width="100" height="16" rx="8" fill="#f97316" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#f97316">E1 → E2 → E3 → ✓</text>
+  </g>
+
+  <!-- Pattern 9: Human-in-the-Loop -->
+  <g transform="translate(720, 298)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#a855f7">Human-in-the-Loop</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Interrupt + Resume</text>
+    <!-- Graph -->
+    <g transform="translate(102, 94)">
+      <circle cx="-38" cy="0" r="11" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+      <text x="-38" y="4" text-anchor="middle" font-family="monospace" font-size="7" fill="#a855f7">AI</text>
+      <!-- Pause icon -->
+      <rect x="-8" y="-10" width="20" height="20" rx="4" fill="#0f172a" stroke="#c084fc" stroke-width="1.5"/>
+      <rect x="-3" y="-5" width="3" height="10" rx="1" fill="#c084fc"/>
+      <rect x="4" y="-5" width="3" height="10" rx="1" fill="#c084fc"/>
+      <!-- Human -->
+      <circle cx="38" cy="0" r="11" fill="#0f172a" stroke="#d8b4fe" stroke-width="1.5"/>
+      <text x="38" y="4" text-anchor="middle" font-family="monospace" font-size="8" fill="#d8b4fe">👤</text>
+      <line x1="-27" y1="0" x2="-9" y2="0" stroke="#334155" stroke-width="1"/>
+      <line x1="13" y1="0" x2="27" y2="0" stroke="#334155" stroke-width="1"/>
+    </g>
+    <rect x="60" y="136" width="84" height="16" rx="8" fill="#a855f7" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#a855f7">⏸ interrupt</text>
+  </g>
+
+  <!-- Pattern 10: Swarm -->
+  <g transform="translate(948, 298)">
+    <rect width="204" height="160" rx="10" fill="url(#card)" stroke="#1e293b" stroke-width="1" filter="url(#shadow)"/>
+    <text x="102" y="28" text-anchor="middle" font-family="'SF Pro Text','Segoe UI',system-ui,sans-serif" font-size="13" font-weight="600" fill="#06b6d4">Swarm</text>
+    <text x="102" y="44" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="9" fill="#475569">Decentralized Collective</text>
+    <!-- Graph: mesh network -->
+    <g transform="translate(102, 92)">
+      <circle cx="0" cy="-20" r="9" fill="#0f172a" stroke="#06b6d4" stroke-width="1.2"/>
+      <text x="0" y="-16" text-anchor="middle" font-family="monospace" font-size="6" fill="#06b6d4">A</text>
+      <circle cx="-30" cy="8" r="9" fill="#0f172a" stroke="#22d3ee" stroke-width="1.2"/>
+      <text x="-30" y="12" text-anchor="middle" font-family="monospace" font-size="6" fill="#22d3ee">B</text>
+      <circle cx="30" cy="8" r="9" fill="#0f172a" stroke="#67e8f9" stroke-width="1.2"/>
+      <text x="30" y="12" text-anchor="middle" font-family="monospace" font-size="6" fill="#67e8f9">C</text>
+      <!-- Mesh connections -->
+      <line x1="-6" y1="-12" x2="-24" y2="1" stroke="#334155" stroke-width="0.8"/>
+      <line x1="6" y1="-12" x2="24" y2="1" stroke="#334155" stroke-width="0.8"/>
+      <line x1="-21" y1="8" x2="21" y2="8" stroke="#334155" stroke-width="0.8"/>
+      <!-- Bidirectional dots -->
+      <circle cx="-15" cy="-5" r="1.5" fill="#334155"/>
+      <circle cx="15" cy="-5" r="1.5" fill="#334155"/>
+      <circle cx="0" cy="8" r="1.5" fill="#334155"/>
+    </g>
+    <rect x="52" y="136" width="100" height="16" rx="8" fill="#06b6d4" opacity="0.15"/>
+    <text x="102" y="148" text-anchor="middle" font-family="monospace" font-size="8" fill="#06b6d4">async concurrent</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="490" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="12" fill="#475569">Each pattern: complete code · architecture diagram · benchmark · dual-language docs</text>
+  <text x="600" y="510" text-anchor="middle" font-family="'SF Mono','Cascadia Code',monospace" font-size="11" fill="#334155">pip install agentflow  ·  github.com/iuyup/AgentFlow</text>
+</svg>

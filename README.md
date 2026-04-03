@@ -10,6 +10,8 @@ AgentFlow is a curated collection of battle-tested multi-agent design patterns b
 
 **Live Demo:** https://iuyup.github.io/AgentFlow
 
+![AgentFlow Overview](docs/hero.svg)
+
 ## Architecture Overview
 
 ```
