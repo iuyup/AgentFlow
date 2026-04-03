@@ -182,16 +182,16 @@ flowchart TD
     class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10 decision
     class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard pattern
 
-    click Hitl href "/patterns/human_in_the_loop_zh/"
-    click RAG href "/patterns/rag_agent_zh/"
-    click Refl href "/patterns/reflection_zh/"
-    click CoE href "/patterns/chain_of_experts_zh/"
-    click Hier href "/patterns/hierarchical_zh/"
-    click MR href "/patterns/map_reduce_zh/"
-    click Deb href "/patterns/debate_zh/"
-    click Vot href "/patterns/voting_zh/"
-    click Swarm href "/patterns/swarm_zh/"
-    click Guard href "/patterns/guardrail_zh/"
+    click Hitl href "/patterns/human_in_the_loop/"
+    click RAG href "/patterns/rag_agent/"
+    click Refl href "/patterns/reflection/"
+    click CoE href "/patterns/chain_of_experts/"
+    click Hier href "/patterns/hierarchical/"
+    click MR href "/patterns/map_reduce/"
+    click Deb href "/patterns/debate/"
+    click Vot href "/patterns/voting/"
+    click Swarm href "/patterns/swarm/"
+    click Guard href "/patterns/guardrail/"
 ```
 
 _Click a pattern name to jump to its documentation_
