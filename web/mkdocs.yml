@@ -56,6 +56,13 @@ plugins:
       docs_language: en
       fallback_to_default: false
       re_material_sidebar: true
+      languages:
+        - locale: en
+          name: English
+          build: true
+        - locale: zh
+          name: 中文
+          build: false
 
 # Extra CSS
 extra_css:
