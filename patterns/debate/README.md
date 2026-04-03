@@ -96,7 +96,7 @@ class DebateState(TypedDict):
 ### Key Design Decisions
 
 - **Annotated list with `operator.add`**: The `debate_history` key uses LangGraph's `Annotated[..., operator.add]` pattern so each node appends new arguments without overwriting previous rounds.
-- **Moderator parses its own output**: The moderator must emit `SUMMARY:`, `STATUS:`, and `DECISION:` lines. The pattern extracts these via `_extract_section`.
+- **Moderator parses its own output**: The moderator must emit `SUMMARY:`, `STATUS:`, and `DECISION:` lines. The pattern extracts these via ``extract_section`` from ``agentflow.utils``.
 - **Moderator controls settlement**: Settlement is not automatic — the moderator LLM decides based on argument quality and consensus.
 
 ---

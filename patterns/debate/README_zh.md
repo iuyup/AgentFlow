@@ -96,7 +96,7 @@ class DebateState(TypedDict):
 ### 关键设计决策
 
 - **`Annotated[..., operator.add]`**：辩论历史使用 LangGraph 的 `Annotated` + `operator.add` 注解模式，每轮辩论追加新论点而不覆盖之前的内容。
-- **主持人自解析输出**：主持人 LLM 必须输出 `SUMMARY:`、`STATUS:`、`DECISION:` 三行。模式通过 `_extract_section` 提取各字段。
+- **主持人自解析输出**：主持人 LLM 必须输出 `SUMMARY:`、`STATUS:`、`DECISION:` 三行。模式通过 `agentflow.utils` 中的 `extract_section` 提取各字段。
 - **共识由主持人决定**：是否"达成共识"不是自动判断的，而是主持人根据论点质量和共识程度自主决定。
 
 ---

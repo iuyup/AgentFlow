@@ -445,11 +445,14 @@ def test_format_history_multiple_rounds() -> None:
 
 
 def test_extract_section() -> None:
+    from agentflow.utils import extract_section
+
     text = "SUMMARY: A short summary.\nSTATUS: SETTLED\nDECISION: Go ahead."
-    assert DebatePattern._extract_section(text, "SUMMARY") == "A short summary."
-    assert DebatePattern._extract_section(text, "STATUS") == "SETTLED"
-    assert DebatePattern._extract_section(text, "DECISION") == "Go ahead."
-    assert DebatePattern._extract_section(text, "MISSING") == ""
+    markers = ("SUMMARY:", "STATUS:", "DECISION:")
+    assert extract_section(text, "SUMMARY", prefix="", known_markers=markers) == "A short summary."
+    assert extract_section(text, "STATUS", prefix="", known_markers=markers) == "SETTLED"
+    assert extract_section(text, "DECISION", prefix="", known_markers=markers) == "Go ahead."
+    assert extract_section(text, "MISSING", prefix="", known_markers=markers) == ""
 
 
 # ---------------------------------------------------------------------------

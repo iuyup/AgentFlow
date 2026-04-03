@@ -9,6 +9,7 @@ Graph topology:
     START → debate_round → moderator → (continue?) → debate_round or END
 """
 
+from agentflow.utils import extract_section
 from agentflow.utils import get_default_llm as _default_llm
 
 import asyncio
@@ -181,9 +182,15 @@ class DebatePattern:
         text = response.content
 
         # Parse the moderator's structured response
-        summary = self._extract_section(text, "SUMMARY")
-        status_raw = self._extract_section(text, "STATUS")
-        decision = self._extract_section(text, "DECISION")
+        summary = extract_section(
+            text, "SUMMARY", prefix="", known_markers=("SUMMARY:", "STATUS:", "DECISION:")
+        )
+        status_raw = extract_section(
+            text, "STATUS", prefix="", known_markers=("SUMMARY:", "STATUS:", "DECISION:")
+        )
+        decision = extract_section(
+            text, "DECISION", prefix="", known_markers=("SUMMARY:", "STATUS:", "DECISION:")
+        )
 
         # Robust status parsing: check for SETTLED/CONTINUE keyword
         status = status_raw.strip().upper()
@@ -293,24 +300,3 @@ class DebatePattern:
 
         return "\n".join(lines)
 
-    @staticmethod
-    def _extract_section(text: str, label: str) -> str:
-        """Extract content after a ``LABEL:`` marker in moderator output."""
-        marker = f"{label}:"
-        idx = text.find(marker)
-        if idx == -1:
-            return ""
-
-        start = idx + len(marker)
-
-        # Find the next known section marker or end of text
-        next_markers = ["SUMMARY:", "STATUS:", "DECISION:"]
-        end = len(text)
-        for m in next_markers:
-            if m == marker:
-                continue
-            pos = text.find(m, start)
-            if pos != -1 and pos < end:
-                end = pos
-
-        return text[start:end].strip()
