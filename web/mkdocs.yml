@@ -76,6 +76,17 @@ nav:
     - patterns/chain_of_experts.md
     - patterns/human_in_the_loop.md
     - patterns/swarm.md
+  - 模式（中文）:
+    - patterns/reflection_zh.md
+    - patterns/debate_zh.md
+    - patterns/map_reduce_zh.md
+    - patterns/hierarchical_zh.md
+    - patterns/voting_zh.md
+    - patterns/guardrail_zh.md
+    - patterns/rag_agent_zh.md
+    - patterns/chain_of_experts_zh.md
+    - patterns/human_in_the_loop_zh.md
+    - patterns/swarm_zh.md
   - Guide:
     - guide/index.md
     - guide/getting-started.md
