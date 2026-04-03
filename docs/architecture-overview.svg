@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#111827"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect width="860" height="320" rx="12" fill="url(#bg)"/>
+  <!-- Grid -->
+  <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e293b" stroke-width="0.4"/>
+  </pattern>
+  <rect width="860" height="320" rx="12" fill="url(#grid)" opacity="0.3"/>
+
+  <!-- Title -->
+  <text x="430" y="34" text-anchor="middle" font-family="'SF Pro Display','Segoe UI',system-ui,sans-serif" font-size="16" font-weight="700" fill="#f1f5f9" letter-spacing="0.5">Architecture Overview</text>
+
+  <!-- Top flow: User Query → Pattern → Response -->
+  <rect x="60" y="54" width="110" height="32" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="115" y="74" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#94a3b8">User Query</text>
+
+  <line x1="170" y1="70" x2="290" y2="70" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="288,66 296,70 288,74" fill="#475569"/>
+
+  <rect x="296" y="50" width="268" height="40" rx="8" fill="#0f172a" stroke="#14b8a6" stroke-width="1.5"/>
+  <text x="430" y="75" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="600" fill="#14b8a6">Orchestration Pattern</text>
+
+  <line x1="564" y1="70" x2="684" y2="70" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="682,66 690,70 682,74" fill="#475569"/>
+
+  <rect x="690" y="54" width="120" height="32" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="750" y="74" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#94a3b8">Final Response</text>
+
+  <!-- Connector line down -->
+  <line x1="430" y1="90" x2="430" y2="118" stroke="#1e293b" stroke-width="1.2"/>
+
+  <!-- Row 1: 5 patterns -->
+  <g transform="translate(30, 120)">
+    <!-- Reflection -->
+    <rect x="0" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#14b8a6" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="74" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#14b8a6">🔄 Reflection</text>
+    <text x="74" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Write → Review Loop</text>
+
+    <!-- Debate -->
+    <rect x="162" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#f59e0b" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="236" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#f59e0b">⚔️ Debate</text>
+    <text x="236" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">N-Party Deliberation</text>
+
+    <!-- MapReduce -->
+    <rect x="324" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#8b5cf6" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="398" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#8b5cf6">🗂️ MapReduce</text>
+    <text x="398" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Parallel Fan-out</text>
+
+    <!-- Hierarchical -->
+    <rect x="486" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#ec4899" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="560" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#ec4899">📊 Hierarchical</text>
+    <text x="560" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Manager → Workers</text>
+
+    <!-- Voting -->
+    <rect x="648" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#10b981" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="722" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#10b981">🗳️ Voting</text>
+    <text x="722" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Broadcast + Aggregate</text>
+  </g>
+
+  <!-- Row 2: 5 patterns -->
+  <g transform="translate(30, 190)">
+    <!-- GuardRail -->
+    <rect x="0" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#ef4444" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="74" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#ef4444">🛡️ GuardRail</text>
+    <text x="74" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Safety Checkpoint</text>
+
+    <!-- RAG-Agent -->
+    <rect x="162" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#3b82f6" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="236" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#3b82f6">📚 RAG-Agent</text>
+    <text x="236" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Conditional Retrieval</text>
+
+    <!-- Chain-of-Experts -->
+    <rect x="324" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#f97316" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="398" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#f97316">🔗 Experts</text>
+    <text x="398" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Sequential Routing</text>
+
+    <!-- Human-in-the-Loop -->
+    <rect x="486" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#a855f7" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="560" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#a855f7">👤 HITL</text>
+    <text x="560" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Interrupt + Resume</text>
+
+    <!-- Swarm -->
+    <rect x="648" y="0" width="148" height="50" rx="8" fill="url(#card)" stroke="#06b6d4" stroke-width="1.2" filter="url(#shadow)"/>
+    <text x="722" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="600" fill="#06b6d4">🐝 Swarm</text>
+    <text x="722" y="38" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#475569">Decentralized Collective</text>
+  </g>
+
+  <!-- Vertical connectors from center line to rows -->
+  <line x1="104" y1="118" x2="104" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+  <line x1="266" y1="118" x2="266" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+  <line x1="428" y1="118" x2="428" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+  <line x1="590" y1="118" x2="590" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+  <line x1="752" y1="118" x2="752" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+  <!-- Horizontal connector -->
+  <line x1="104" y1="118" x2="752" y2="118" stroke="#1e293b" stroke-width="0.8"/>
+
+  <!-- Vertical connectors row1 to row2 -->
+  <line x1="104" y1="170" x2="104" y2="190" stroke="#1e293b" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <line x1="266" y1="170" x2="266" y2="190" stroke="#1e293b" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <line x1="428" y1="170" x2="428" y2="190" stroke="#1e293b" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <line x1="590" y1="170" x2="590" y2="190" stroke="#1e293b" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <line x1="752" y1="170" x2="752" y2="190" stroke="#1e293b" stroke-width="0.6" stroke-dasharray="3,3"/>
+
+  <!-- Bottom tagline -->
+  <text x="430" y="278" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#334155">Each pattern is self-contained · Copy what you need · Real LangGraph API</text>
+
+  <!-- Badge row -->
+  <rect x="280" y="290" width="70" height="18" rx="9" fill="#14b8a6" opacity="0.12"/>
+  <text x="315" y="303" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#14b8a6">140+ tests</text>
+  <rect x="360" y="290" width="80" height="18" rx="9" fill="#8b5cf6" opacity="0.12"/>
+  <text x="400" y="303" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#8b5cf6">benchmarks</text>
+  <rect x="450" y="290" width="80" height="18" rx="9" fill="#f59e0b" opacity="0.12"/>
+  <text x="490" y="303" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#f59e0b">EN + 中文 docs</text>
+</svg>

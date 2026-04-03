@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#111827"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="720" height="220" rx="12" fill="url(#bg)"/>
+  <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e293b" stroke-width="0.3"/>
+  </pattern>
+  <rect width="720" height="220" rx="12" fill="url(#grid)" opacity="0.3"/>
+
+  <!-- Title -->
+  <text x="360" y="28" text-anchor="middle" font-family="'SF Pro Display','Segoe UI',system-ui,sans-serif" font-size="14" font-weight="700" fill="#8b5cf6">🗂️ MapReduce Pattern</text>
+  <text x="360" y="44" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#475569">Parallel Fan-Out + Reduce</text>
+
+  <!-- START -->
+  <circle cx="70" cy="110" r="18" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+  <text x="70" y="114" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" font-weight="600" fill="#94a3b8">START</text>
+
+  <!-- Arrow to dispatch -->
+  <line x1="88" y1="110" x2="130" y2="110" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="128,106 136,110 128,114" fill="#475569"/>
+
+  <!-- Dispatch node -->
+  <rect x="138" y="90" width="96" height="40" rx="8" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="186" y="106" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#8b5cf6">📤 Dispatch</text>
+  <text x="186" y="120" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#475569">Send API</text>
+
+  <!-- Fan-out arrows -->
+  <line x1="234" y1="98" x2="306" y2="68" stroke="#a78bfa" stroke-width="1.2"/>
+  <polygon points="303,64 311,66 305,72" fill="#a78bfa"/>
+  
+  <line x1="234" y1="110" x2="306" y2="110" stroke="#a78bfa" stroke-width="1.2"/>
+  <polygon points="304,106 312,110 304,114" fill="#a78bfa"/>
+  
+  <line x1="234" y1="122" x2="306" y2="152" stroke="#a78bfa" stroke-width="1.2"/>
+  <polygon points="303,148 311,154 305,156" fill="#a78bfa"/>
+
+  <!-- "parallel" label -->
+  <text x="275" y="78" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#a78bfa">parallel</text>
+
+  <!-- Mapper 1 -->
+  <rect x="314" y="48" width="100" height="38" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2" filter="url(#shadow)"/>
+  <text x="364" y="64" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#a78bfa">⚙️ Mapper 1</text>
+  <text x="364" y="78" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#475569">source analysis</text>
+
+  <!-- Mapper 2 -->
+  <rect x="314" y="91" width="100" height="38" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2" filter="url(#shadow)"/>
+  <text x="364" y="107" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#a78bfa">⚙️ Mapper 2</text>
+  <text x="364" y="121" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#475569">source analysis</text>
+
+  <!-- Mapper N -->
+  <rect x="314" y="134" width="100" height="38" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1.2" filter="url(#shadow)"/>
+  <text x="364" y="150" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#a78bfa">⚙️ Mapper N</text>
+  <text x="364" y="164" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#475569">source analysis</text>
+
+  <!-- Fan-in arrows -->
+  <line x1="414" y1="68" x2="486" y2="102" stroke="#c4b5fd" stroke-width="1"/>
+  <line x1="414" y1="110" x2="486" y2="110" stroke="#c4b5fd" stroke-width="1"/>
+  <line x1="414" y1="152" x2="486" y2="118" stroke="#c4b5fd" stroke-width="1"/>
+
+  <!-- Reducer -->
+  <rect x="488" y="88" width="100" height="44" rx="8" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="538" y="106" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#8b5cf6">📥 Reducer</text>
+  <text x="538" y="122" text-anchor="middle" font-family="'SF Mono',monospace" font-size="7" fill="#475569">synthesize all</text>
+
+  <!-- Arrow to END -->
+  <line x1="588" y1="110" x2="630" y2="110" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="628,106 636,110 628,114" fill="#475569"/>
+
+  <!-- END -->
+  <circle cx="660" cy="110" r="18" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <text x="660" y="114" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" font-weight="600" fill="#22c55e">END</text>
+
+  <!-- Bottom note -->
+  <text x="360" y="205" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#334155">N sources → N parallel LLM calls → 1 synthesized summary</text>
+</svg>
