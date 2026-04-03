@@ -11,6 +11,9 @@ each iteration.
 """
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
+
+from langchain_core.callbacks import BaseCallbackHandler
 
 import operator
 import re
@@ -109,8 +112,9 @@ class ReflectionPattern:
         llm: BaseChatModel | None = None,
         max_iterations: int = 3,
         score_threshold: float = 8.0,
+        counter_handler: BaseCallbackHandler | None = None,
     ):
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
         self.max_iterations = max_iterations
         self.score_threshold = score_threshold
 
@@ -229,4 +233,6 @@ class ReflectionPattern:
             "iteration": 0,
             "history": [],
         }
-        return graph.invoke(initial_state)
+        result = graph.invoke(initial_state)
+        result["llm_call_count"] = get_llm_call_count()
+        return result

@@ -9,13 +9,18 @@ Graph topology:
     START → debate_round → moderator → (continue?) → debate_round or END
 """
 
-from agentflow.utils import extract_section
-from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import (
+    LLMCallCounterHandler,
+    extract_section,
+    get_default_llm as _default_llm,
+    get_llm_call_count,
+)
 
 import asyncio
 import operator
 from typing import Annotated, Literal, TypedDict
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
@@ -84,8 +89,9 @@ class DebatePattern:
         model: str | None = None,
         llm: BaseChatModel | None = None,
         max_rounds: int = 3,
+        counter_handler: BaseCallbackHandler | None = None,
     ):
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler=counter_handler)
         self.max_rounds = max_rounds
 
     # ------------------------------------------------------------------
@@ -276,7 +282,9 @@ class DebatePattern:
             "is_settled": False,
         }
 
-        return asyncio.run(graph.ainvoke(initial_state))
+        result = asyncio.run(graph.ainvoke(initial_state))
+        result["llm_call_count"] = get_llm_call_count()
+        return result
 
     # ------------------------------------------------------------------
     # Helpers

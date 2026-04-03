@@ -14,7 +14,9 @@ import operator
 from typing import Annotated, TypedDict
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
@@ -74,8 +76,9 @@ class ChainOfExpertsPattern:
         self,
         model: str | None = None,
         llm: BaseChatModel | None = None,
+        counter_handler: BaseCallbackHandler | None = None,
     ):
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
 
     def _expert_node(self, state: ChainOfExpertsState) -> dict:
         """Each expert processes the task in sequence."""
@@ -195,4 +198,5 @@ class ChainOfExpertsPattern:
                 "final_synthesis": "",
             }
         )
+        result["llm_call_count"] = get_llm_call_count()
         return result

@@ -11,6 +11,9 @@ Typical use cases:
 """
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
+
+from langchain_core.callbacks import BaseCallbackHandler
 
 import operator
 from typing import Annotated, TypedDict
@@ -89,8 +92,9 @@ class HierarchicalPattern:
         self,
         model: str | None = None,
         llm: BaseChatModel | None = None,
+        counter_handler: BaseCallbackHandler | None = None,
     ) -> None:
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
         self._worker_graph = self._build_worker_graph()
 
     # -- Worker subgraph (runs independently per subtask) --------------------
@@ -272,4 +276,5 @@ class HierarchicalPattern:
                 "final_result": "",
             }
         )
+        result["llm_call_count"] = get_llm_call_count()
         return result

@@ -21,6 +21,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from agentflow.utils import (
+    LLMCallCounterHandler,
+    get_llm_call_count,
+    reset_llm_count,
+)
+
+# Handler registry so we can read counts after each run
+_handler_registry: dict[str, LLMCallCounterHandler] = {}
+
 # ---------------------------------------------------------------------------
 # Pattern registry — import all patterns here
 # ---------------------------------------------------------------------------
@@ -84,14 +93,20 @@ class BenchmarkResult:
 
 
 def _run_reflection(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.reflection.pattern import ReflectionPattern
-    pattern = ReflectionPattern(max_iterations=2, score_threshold=5.0)
+    handler = LLMCallCounterHandler()
+    _handler_registry["reflection"] = handler
+    pattern = ReflectionPattern(max_iterations=2, score_threshold=5.0, counter_handler=handler)
     return pattern.run(topic=inputs["topic"])
 
 
 def _run_debate(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.debate.pattern import DebatePattern
-    pattern = DebatePattern(max_rounds=2)
+    handler = LLMCallCounterHandler()
+    _handler_registry["debate"] = handler
+    pattern = DebatePattern(max_rounds=2, counter_handler=handler)
     debaters = [
         {
             "name": "Advocate",
@@ -108,20 +123,29 @@ def _run_debate(inputs: dict) -> dict:
 
 
 def _run_map_reduce(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.map_reduce.pattern import MapReducePattern
-    pattern = MapReducePattern()
+    handler = LLMCallCounterHandler()
+    _handler_registry["map_reduce"] = handler
+    pattern = MapReducePattern(counter_handler=handler)
     return pattern.run(topic=inputs["topic"], sources=inputs["sources"])
 
 
 def _run_hierarchical(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.hierarchical.pattern import HierarchicalPattern
-    pattern = HierarchicalPattern()
+    handler = LLMCallCounterHandler()
+    _handler_registry["hierarchical"] = handler
+    pattern = HierarchicalPattern(counter_handler=handler)
     return pattern.run(task=inputs["question"])
 
 
 def _run_voting(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.voting.pattern import VotingPattern
-    pattern = VotingPattern()
+    handler = LLMCallCounterHandler()
+    _handler_registry["voting"] = handler
+    pattern = VotingPattern(counter_handler=handler)
     voters = [
         {"name": "Security Expert", "expertise": "Security analysis"},
         {"name": "Performance Expert", "expertise": "Performance optimization"},
@@ -131,32 +155,47 @@ def _run_voting(inputs: dict) -> dict:
 
 
 def _run_guardrail(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.guardrail.pattern import GuardRailPattern
-    pattern = GuardRailPattern(max_attempts=2)
+    handler = LLMCallCounterHandler()
+    _handler_registry["guardrail"] = handler
+    pattern = GuardRailPattern(max_attempts=2, counter_handler=handler)
     return pattern.run(task=inputs["task"])
 
 
 def _run_rag_agent(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.rag_agent.pattern import RAGAgentPattern
-    pattern = RAGAgentPattern(max_retrievals=2)
+    handler = LLMCallCounterHandler()
+    _handler_registry["rag_agent"] = handler
+    pattern = RAGAgentPattern(max_retrievals=2, counter_handler=handler)
     return pattern.run(query=inputs["query"])
 
 
 def _run_chain_of_experts(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.chain_of_experts.pattern import ChainOfExpertsPattern
-    pattern = ChainOfExpertsPattern()
+    handler = LLMCallCounterHandler()
+    _handler_registry["chain_of_experts"] = handler
+    pattern = ChainOfExpertsPattern(counter_handler=handler)
     return pattern.run(task=inputs["task"], experts=inputs["experts"])
 
 
 def _run_human_in_the_loop(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.human_in_the_loop.pattern import HumanInTheLoopPattern
-    pattern = HumanInTheLoopPattern(max_attempts=2)
+    handler = LLMCallCounterHandler()
+    _handler_registry["human_in_the_loop"] = handler
+    pattern = HumanInTheLoopPattern(max_attempts=2, counter_handler=handler)
     return pattern.run(task=inputs["task"])
 
 
 def _run_swarm(inputs: dict) -> dict:
+    global _handler_registry
     from patterns.swarm.pattern import SwarmPattern
-    pattern = SwarmPattern(max_rounds=2)
+    handler = LLMCallCounterHandler()
+    _handler_registry["swarm"] = handler
+    pattern = SwarmPattern(max_rounds=2, counter_handler=handler)
     return pattern.run(task=inputs["task"], agents=inputs["agents"])
 
 
@@ -207,10 +246,12 @@ class BenchmarkRunner:
 
             # Extract output from result dict
             output = _extract_output(result, pattern_name)
+            handler = _handler_registry.get(pattern_name)
+            llm_count = result.get("llm_call_count", get_llm_call_count(handler) if handler else 0)
             return BenchmarkResult(
                 task_name=task.name,
                 pattern_name=pattern_name,
-                llm_call_count=_estimate_llm_calls(result, pattern_name),
+                llm_call_count=llm_count,
                 elapsed_seconds=elapsed,
                 output_length=len(output),
                 output_preview=output[:200],
@@ -309,37 +350,6 @@ def _extract_output(result: dict, pattern_name: str) -> str:
     }
     key = key_map.get(pattern_name, "")
     return result.get(key, str(result))[:1000]
-
-
-def _estimate_llm_calls(result: dict, pattern_name: str) -> int:
-    """Estimate LLM call count from result metadata."""
-    # Each pattern stores iteration/count info differently
-    # These are approximate counts embedded in results
-    count_keys = {
-        "reflection": "iteration",
-        "debate": "current_round",
-        "map_reduce": None,
-        "hierarchical": None,
-        "voting": None,
-        "guardrail": "attempts",
-        "rag_agent": "retrieval_count",
-        "chain_of_experts": "current_expert_index",
-        "human_in_the_loop": "attempts",
-        "swarm": "rounds",
-    }
-    key = count_keys.get(pattern_name)
-    if key:
-        val = result.get(key, 0)
-        if isinstance(val, int):
-            # Rough estimate: n iterations = n+1 LLM calls for reflection/guardrail
-            if pattern_name in ("reflection", "guardrail"):
-                return val + 1
-            elif pattern_name == "debate":
-                return val + 1
-            elif pattern_name == "rag_agent":
-                return val + 2  # agent calls + synthesize calls
-    return 1  # minimum estimate
-
 
 # ---------------------------------------------------------------------------
 # Entry point

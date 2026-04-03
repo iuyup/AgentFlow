@@ -12,6 +12,9 @@ Typical use cases:
 """
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
+
+from langchain_core.callbacks import BaseCallbackHandler
 
 import re
 from typing import Literal, TypedDict
@@ -125,8 +128,9 @@ class RAGAgentPattern:
         model: str | None = None,
         llm: BaseChatModel | None = None,
         max_retrievals: int = 3,
+        counter_handler: BaseCallbackHandler | None = None,
     ) -> None:
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
         self.max_retrievals = max_retrievals
 
     # -- Graph nodes -------------------------------------------------------
@@ -306,4 +310,5 @@ class RAGAgentPattern:
                 "pending_doc_queue": [],
             }
         )
+        result["llm_call_count"] = get_llm_call_count()
         return result

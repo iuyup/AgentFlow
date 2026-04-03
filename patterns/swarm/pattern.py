@@ -10,7 +10,9 @@ import operator
 from typing import Annotated, Literal, TypedDict
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
@@ -75,8 +77,9 @@ class SwarmPattern:
         model: str | None = None,
         llm: BaseChatModel | None = None,
         max_rounds: int = 3,
+        counter_handler: BaseCallbackHandler | None = None,
     ):
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler=counter_handler)
         self.max_rounds = max_rounds
 
     def _initialize(self, state: SwarmState) -> dict:
@@ -225,4 +228,5 @@ class SwarmPattern:
                 "final_conclusion": "",
             }
         ))
+        result["llm_call_count"] = get_llm_call_count()
         return result

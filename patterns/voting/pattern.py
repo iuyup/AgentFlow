@@ -12,6 +12,9 @@ Typical use cases:
 """
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
+
+from langchain_core.callbacks import BaseCallbackHandler
 
 import operator
 from typing import Annotated, Literal, TypedDict
@@ -100,8 +103,9 @@ class VotingPattern:
         self,
         model: str | None = None,
         llm: BaseChatModel | None = None,
+        counter_handler: BaseCallbackHandler | None = None,
     ) -> None:
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
 
     # -- Graph nodes & edges ------------------------------------------------
 
@@ -201,4 +205,5 @@ class VotingPattern:
                 "voting_strategy": voting_strategy,
             }
         )
+        result["llm_call_count"] = get_llm_call_count()
         return result

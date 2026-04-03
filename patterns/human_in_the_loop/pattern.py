@@ -9,7 +9,9 @@ import re
 from typing import Annotated, Literal, TypedDict
 
 from agentflow.utils import get_default_llm as _default_llm
+from agentflow.utils import get_llm_call_count
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
@@ -79,8 +81,9 @@ class HumanInTheLoopPattern:
         model: str | None = None,
         llm: BaseChatModel | None = None,
         max_attempts: int = 3,
+        counter_handler: BaseCallbackHandler | None = None,
     ):
-        self.llm = llm or _default_llm(model)
+        self.llm = llm or _default_llm(model, counter_handler)
         self.max_attempts = max_attempts
 
     def _primary_execute(self, state: HumanInTheLoopState) -> dict:
@@ -196,4 +199,5 @@ class HumanInTheLoopPattern:
                 "final_output": "",
             }
         )
+        result["llm_call_count"] = get_llm_call_count()
         return result
