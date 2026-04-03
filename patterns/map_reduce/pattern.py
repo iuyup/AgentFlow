@@ -173,5 +173,5 @@ class MapReducePattern:
                 "final_summary": "",
             }
         )
-        result["llm_call_count"] = get_llm_call_count()
+        result["llm_call_count"] = get_llm_call_count(self.counter_handler)
         return result
