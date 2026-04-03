@@ -141,6 +141,61 @@ description: Multi-Agent Collaboration Design Patterns with LangGraph
 
 基于 LangGraph 的多 Agent 协作设计模式实战库，提供 10+ 种经过验证的模式，每个模式都有完整代码、架构图、适用场景分析和性能对比。
 
+## Quick Decision Tree
+
+```mermaid
+flowchart TD
+    Start(["你的场景需要什么？"])
+    
+    Q1{是否需要人类<br/>介入确认？}
+    Q1-- 是 --> Hitl["👤 Human-in-the-Loop<br/>人机协作"]
+    Q1-- 否 --> Q2{任务是否<br/>复杂多面？}
+    
+    Q2-- 简单任务 --> Q3{是否需要<br/>检索增强？}
+    Q2-- 复杂任务 --> Q4{是否有安全<br/>合规要求？}
+    
+    Q3-- 是 --> RAG["📚 RAG-Agent<br/>检索增强"]
+    Q3-- 否 --> Q5{是否需要<br/>质量优化？}
+    
+    Q5-- 是 --> Refl["🔄 Reflection<br/>反思循环"]
+    Q5-- 否 --> Q6{是否需要<br/>多专家链式？}
+    
+    Q6-- 是 --> CoE["🔗 Chain-of-Experts<br/>专家链"]
+    Q6-- 否 --> Single["✓ 单 Agent<br/>无需模式"]
+    
+    Q4-- 是 --> Guard["🛡️ GuardRail<br/>风控守门"]
+    Q4-- 否 --> Q7{是否有层级<br/>管理结构？}
+    
+    Q7-- 是 --> Hier["📊 Hierarchical<br/>层级委派"]
+    Q7-- 否 --> Q8{是否需要<br/>并行处理？}
+    
+    Q8-- 是 --> MR["🗂️ MapReduce<br/>并行处理"]
+    Q8-- 否 --> Q9{是否有对立<br/>观点权衡？}
+    
+    Q9-- 是 --> Deb["⚔️ Debate<br/>辩论模式"]
+    Q9-- 否 --> Q10{是否需要<br/>投票决策？}
+    
+    Q10-- 是 --> Vot["🗳️ Voting<br/>投票决策"]
+    Q10-- 否 --> Swarm["🐝 Swarm<br/>群体智能"]
+    
+    class Start terminal
+    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10 decision
+    class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard pattern
+    
+    click Hitl href "/patterns/human_in_the_loop_zh/"
+    click RAG href "/patterns/rag_agent_zh/"
+    click Refl href "/patterns/reflection_zh/"
+    click CoE href "/patterns/chain_of_experts_zh/"
+    click Hier href "/patterns/hierarchical_zh/"
+    click MR href "/patterns/map_reduce_zh/"
+    click Deb href "/patterns/debate_zh/"
+    click Vot href "/patterns/voting_zh/"
+    click Swarm href "/patterns/swarm_zh/"
+    click Guard href "/patterns/guardrail_zh/"
+```
+
+_点击模式名称可跳转到对应中文文档_
+
 ## Patterns
 
 <div class="patterns-grid" markdown>
