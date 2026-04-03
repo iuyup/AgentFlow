@@ -71,9 +71,9 @@ cp .env.example .env
 ### 3. Run any pattern
 
 ```bash
-python -m agentflow.patterns.reflection.example
-python -m agentflow.patterns.debate.example
-python -m agentflow.patterns.map_reduce.example
+python -m patterns.reflection.example
+python -m patterns.debate.example
+python -m patterns.map_reduce.example
 ```
 
 ### 4. Browse documentation
@@ -89,8 +89,7 @@ mkdocs serve
 ## Project Structure
 
 ```
-agentflow/
-├── patterns/              # Core: one directory per pattern
+patterns/                  # Core: one directory per pattern
 │   ├── reflection/        # Write → Review loop
 │   ├── debate/            # N-party debate + moderator
 │   ├── map_reduce/        # Parallel fan-out + reduce
@@ -101,6 +100,7 @@ agentflow/
 │   ├── chain_of_experts/  # Sequential expert routing
 │   ├── human_in_the_loop/ # Human interruption
 │   └── swarm/             # Decentralized orchestration
+├── agentflow/             # Core utilities
 ├── web/                   # Documentation site (MkDocs)
 │   ├── docs/             # Documentation source
 │   ├── mkdocs.yml        # Site configuration

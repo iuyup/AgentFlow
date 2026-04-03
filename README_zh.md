@@ -71,9 +71,9 @@ cp .env.example .env
 ### 3. 运行任意模式
 
 ```bash
-python -m agentflow.patterns.reflection.example
-python -m agentflow.patterns.debate.example
-python -m agentflow.patterns.map_reduce.example
+python -m patterns.reflection.example
+python -m patterns.debate.example
+python -m patterns.map_reduce.example
 ```
 
 ### 4. 浏览文档网站
@@ -88,8 +88,7 @@ mkdocs serve          # 访问 http://localhost:8000
 ## 项目结构
 
 ```
-agentflow/
-├── patterns/              # 核心：每个模式一个子目录
+patterns/                  # 核心：每个模式一个子目录
 │   ├── reflection/        # 写作 → 审阅循环
 │   ├── debate/            # N 方辩论 + 主持人
 │   ├── map_reduce/        # 并行扇出 + 归约
@@ -100,6 +99,7 @@ agentflow/
 │   ├── chain_of_experts/  # 顺序专家路由
 │   ├── human_in_the_loop/ # 人工中断
 │   └── swarm/             # 去中心化编排
+├── agentflow/             # 核心工具函数
 ├── web/                   # 文档网站 (MkDocs)
 │   ├── docs/             # 文档源文件
 │   ├── mkdocs.yml        # 网站配置
