@@ -2,11 +2,11 @@
 site_name: AgentFlow
 site_description: Multi-Agent Collaboration Design Patterns with LangGraph
 site_author: AgentFlow Team
-site_url: https://agentflow.dev
+site_url: https://iuyup.github.io/AgentFlow
 
 # Repository
-repo_name: agentflow
-repo_url: https://github.com/agentflow
+repo_name: iuyup/AgentFlow
+repo_url: https://github.com/iuyup/AgentFlow
 edit_uri: ""
 
 # Configuration
