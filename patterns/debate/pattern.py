@@ -18,6 +18,19 @@ from agentflow.utils import (
 
 import asyncio
 import operator
+
+
+def _run_async(coro):
+    """Run coroutine, supporting Jupyter's existing event loop."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    else:
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            future = pool.submit(asyncio.run, coro)
+            return future.result()
 from typing import Annotated, Literal, TypedDict
 
 from langchain_core.callbacks import BaseCallbackHandler
@@ -282,7 +295,7 @@ class DebatePattern:
             "is_settled": False,
         }
 
-        result = asyncio.run(graph.ainvoke(initial_state))
+        result = _run_async(graph.ainvoke(initial_state))
         result["llm_call_count"] = get_llm_call_count(self.counter_handler)
         return result
 

@@ -6,8 +6,21 @@ information, build on each other's work, and collectively reach conclusions.
 """
 
 import asyncio
+import concurrent.futures
 import operator
 from typing import Annotated, Literal, TypedDict
+
+
+def _run_async(coro):
+    """Run coroutine, supporting Jupyter's existing event loop."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    else:
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            future = pool.submit(asyncio.run, coro)
+            return future.result()
 
 from agentflow.utils import get_default_llm as _default_llm
 from agentflow.utils import get_llm_call_count
@@ -217,7 +230,7 @@ class SwarmPattern:
             agents: List of dicts with keys 'name' and 'specialty'.
         """
         compiled = self.build_graph()
-        result = asyncio.run(compiled.ainvoke(
+        result = _run_async(compiled.ainvoke(
             {
                 "task": task,
                 "agents": agents,
