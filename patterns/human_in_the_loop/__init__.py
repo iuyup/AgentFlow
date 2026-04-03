@@ -10,6 +10,6 @@ Typical use cases:
   - Any high-stakes output where human judgment is required
 """
 
-from patterns.human_in_the_loop.pattern import HumanInTheLoopPattern
+from patterns.human_in_the_loop.pattern import HumanInTheLoopPattern, HumanInTheLoopState
 
-__all__ = ["HumanInTheLoopPattern"]
+__all__ = ["HumanInTheLoopPattern", "HumanInTheLoopState"]

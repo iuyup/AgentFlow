@@ -5,6 +5,6 @@ each adding their perspective before passing to the next expert.
 A final synthesizer combines all expert contributions.
 """
 
-from patterns.chain_of_experts.pattern import ChainOfExpertsPattern
+from patterns.chain_of_experts.pattern import ChainOfExpertsPattern, ChainOfExpertsState
 
-__all__ = ["ChainOfExpertsPattern"]
+__all__ = ["ChainOfExpertsPattern", "ChainOfExpertsState"]

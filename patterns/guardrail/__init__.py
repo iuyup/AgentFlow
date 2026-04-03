@@ -1,5 +1,5 @@
 """GuardRail Pattern -- Safety checks before tool execution."""
 
-from patterns.guardrail.pattern import GuardRailPattern
+from patterns.guardrail.pattern import GuardRailPattern, GuardRailState
 
-__all__ = ["GuardRailPattern"]
+__all__ = ["GuardRailPattern", "GuardRailState"]

@@ -10,6 +10,6 @@ Typical use cases:
   - Emergent behavior where collective intelligence exceeds individual
 """
 
-from patterns.swarm.pattern import SwarmPattern
+from patterns.swarm.pattern import SwarmPattern, SwarmState
 
-__all__ = ["SwarmPattern"]
+__all__ = ["SwarmPattern", "SwarmState"]
