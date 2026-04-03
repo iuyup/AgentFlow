@@ -5,6 +5,7 @@ through message passing without a central coordinator.  Agents share
 information, build on each other's work, and collectively reach conclusions.
 """
 
+import asyncio
 import operator
 from typing import Annotated, Literal, TypedDict
 
@@ -102,36 +103,47 @@ class SwarmPattern:
             "rounds": 1,
         }
 
-    def _agent_turn(self, state: SwarmState) -> dict:
-        """Each agent contributes to the collective discussion."""
-        # Build context from all previous messages
+    async def _call_agent(
+        self,
+        agent: dict,
+        task: str,
+        context: str,
+    ) -> dict:
+        """Invoke a single agent's LLM call asynchronously."""
+        system_msg = SystemMessage(
+            content=SWARM_AGENT_PROMPT.format(
+                name=agent["name"],
+                specialty=agent["specialty"],
+            )
+        )
+        user_content = (
+            f"Collective task: {task}\n\n"
+            f"Discussion so far:\n{context}\n\n"
+            f"Your contribution as {agent['name']}:"
+        )
+        response = await self.llm.ainvoke(
+            [system_msg, HumanMessage(content=user_content)]
+        )
+        return {
+            "from_agent": agent["name"],
+            "content": response.content,
+        }
+
+    async def _agent_turn(self, state: SwarmState) -> dict:
+        """Each agent contributes to the collective discussion (concurrently)."""
         context = "\n\n".join(
             f"[{m['from_agent']}]: {m['content'][:500]}"
             for m in state["messages"]
         )
 
-        new_messages = []
-        for agent in state["agents"]:
-            system_msg = SystemMessage(
-                content=SWARM_AGENT_PROMPT.format(
-                    name=agent["name"],
-                    specialty=agent["specialty"],
-                )
-            )
-            user_content = (
-                f"Collective task: {state['task']}\n\n"
-                f"Discussion so far:\n{context}\n\n"
-                f"Your contribution as {agent['name']}:"
-            )
-            response = self.llm.invoke([system_msg, HumanMessage(content=user_content)])
-            new_messages.append({
-                "from_agent": agent["name"],
-                "content": response.content,
-            })
+        tasks = [
+            self._call_agent(agent, state["task"], context)
+            for agent in state["agents"]
+        ]
+        results = await asyncio.gather(*tasks)
 
         return {
-            "messages": new_messages,
-            # Increment here so conditional edge sees updated state
+            "messages": list(results),
             "rounds": state["rounds"] + 1,
         }
 
@@ -202,7 +214,7 @@ class SwarmPattern:
             agents: List of dicts with keys 'name' and 'specialty'.
         """
         compiled = self.build_graph()
-        result = compiled.invoke(
+        result = asyncio.run(compiled.ainvoke(
             {
                 "task": task,
                 "agents": agents,
@@ -212,5 +224,5 @@ class SwarmPattern:
                 "termination_signal": "",
                 "final_conclusion": "",
             }
-        )
+        ))
         return result

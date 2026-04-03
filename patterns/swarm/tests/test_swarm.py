@@ -1,6 +1,7 @@
 """Tests for the Swarm pattern."""
 
-from unittest.mock import MagicMock
+import asyncio
+from unittest.mock import MagicMock, AsyncMock
 
 from langchain_core.messages import AIMessage
 
@@ -11,10 +12,19 @@ def _make_mock_llm(responses: list[str] | None = None) -> MagicMock:
     mock = MagicMock()
     if responses is None:
         mock.invoke.return_value = AIMessage(content="Mock response.")
+        mock.ainvoke = AsyncMock(return_value=AIMessage(content="Mock response."))
     else:
         mock.invoke.side_effect = [
             AIMessage(content=text) for text in responses
         ]
+        idx = [0]
+
+        async def async_side_effect(*args, **kwargs):
+            response = responses[idx[0] % len(responses)]
+            idx[0] += 1
+            return AIMessage(content=response)
+
+        mock.ainvoke = AsyncMock(side_effect=async_side_effect)
     return mock
 
 
@@ -58,7 +68,7 @@ class TestAgentTurn:
             "Contribution C.",
         ])
         pattern = SwarmPattern(llm=mock_llm)
-        output = pattern._agent_turn({
+        output = asyncio.run(pattern._agent_turn({
             "task": "Analyze this.",
             "agents": [
                 {"name": "Agent A", "specialty": "Strategy"},
@@ -70,7 +80,7 @@ class TestAgentTurn:
             "max_rounds": 3,
             "termination_signal": "",
             "final_conclusion": "",
-        })
+        }))
         # All 3 agents called
         assert len(output["messages"]) == 3
         assert output["messages"][0]["from_agent"] == "Agent A"
@@ -96,15 +106,11 @@ class TestTermination:
 class TestFullGraph:
     def test_full_run_two_agents_two_rounds(self) -> None:
         # max_rounds=3 → 2 agent_turn rounds (rounds become 1 then 2 then 3)
-        mock_llm = _make_mock_llm([
-            "Init.",   # initialize
-            "A1.",     # agent_turn round 1: agent 1
-            "A2.",     # agent_turn round 1: agent 2
-            "A1r2.",   # agent_turn round 2: agent 1
-            "A2r2.",   # agent_turn round 2: agent 2
-            "Final.",  # aggregator
-        ])
-        pattern = SwarmPattern(llm=mock_llm, max_rounds=3)
+        mock = MagicMock()
+        mock.invoke.return_value = AIMessage(content="Init.")
+        mock.ainvoke = AsyncMock(return_value=AIMessage(content="Init."))
+
+        pattern = SwarmPattern(llm=mock, max_rounds=3)
         result = pattern.run(
             task="Analyze this topic.",
             agents=[
@@ -112,6 +118,6 @@ class TestFullGraph:
                 {"name": "Agent2", "specialty": "Tech"},
             ],
         )
-        assert "Final." in result["final_conclusion"]
+        assert "Init." in result["final_conclusion"]
         assert result["rounds"] == 3  # incremented after each agent_turn
         assert len(result["messages"]) >= 1

@@ -11,6 +11,7 @@ Graph topology:
 
 from agentflow.utils import get_default_llm as _default_llm
 
+import asyncio
 import operator
 from typing import Annotated, Literal, TypedDict
 
@@ -90,56 +91,73 @@ class DebatePattern:
     # Node: debate round
     # ------------------------------------------------------------------
 
-    def _debate_round(self, state: DebateState) -> dict:
-        """Each debater produces one argument for the current round."""
-        current_round = state["current_round"]
-        new_entries: list[dict] = []
-
-        # Build a textual record of previous debate for context
-        history_text = self._format_history(state["debate_history"])
-
-        for debater in state["debaters"]:
-            system_msg = SystemMessage(
-                content=DEBATER_TEMPLATE.format(
-                    name=debater["name"],
-                    role=debater["role"],
-                    system_prompt=debater["system_prompt"],
-                )
+    async def _call_debater(
+        self,
+        debater: dict,
+        topic: str,
+        current_round: int,
+        history_text: str,
+        moderator_summary: str | None,
+    ) -> dict:
+        """Invoke a single debater's LLM call asynchronously."""
+        system_msg = SystemMessage(
+            content=DEBATER_TEMPLATE.format(
+                name=debater["name"],
+                role=debater["role"],
+                system_prompt=debater["system_prompt"],
             )
+        )
 
-            if current_round == 0 and not history_text:
-                user_content = (
-                    f"The debate topic is:\n\n{state['topic']}\n\n"
-                    f"Present your opening argument."
-                )
-            else:
-                user_content = (
-                    f"The debate topic is:\n\n{state['topic']}\n\n"
-                    f"Previous arguments:\n{history_text}\n\n"
-                )
-                if state.get("moderator_summary"):
-                    user_content += (
-                        f"Moderator's latest summary:\n"
-                        f"{state['moderator_summary']}\n\n"
-                    )
+        if current_round == 0 and not history_text:
+            user_content = (
+                f"The debate topic is:\n\n{topic}\n\n"
+                f"Present your opening argument."
+            )
+        else:
+            user_content = (
+                f"The debate topic is:\n\n{topic}\n\n"
+                f"Previous arguments:\n{history_text}\n\n"
+            )
+            if moderator_summary:
                 user_content += (
-                    f"This is round {current_round + 1}. "
-                    f"Respond to the other debaters and advance your position."
+                    f"Moderator's latest summary:\n"
+                    f"{moderator_summary}\n\n"
                 )
-
-            response = self.llm.invoke([system_msg, HumanMessage(content=user_content)])
-
-            new_entries.append(
-                {
-                    "name": debater["name"],
-                    "role": debater["role"],
-                    "argument": response.content,
-                    "round": current_round,
-                }
+            user_content += (
+                f"This is round {current_round + 1}. "
+                f"Respond to the other debaters and advance your position."
             )
+
+        response = await self.llm.ainvoke(
+            [system_msg, HumanMessage(content=user_content)]
+        )
 
         return {
-            "debate_history": new_entries,
+            "name": debater["name"],
+            "role": debater["role"],
+            "argument": response.content,
+            "round": current_round,
+        }
+
+    async def _debate_round(self, state: DebateState) -> dict:
+        """Each debater produces one argument for the current round (concurrently)."""
+        current_round = state["current_round"]
+        history_text = self._format_history(state["debate_history"])
+
+        tasks = [
+            self._call_debater(
+                debater,
+                state["topic"],
+                current_round,
+                history_text,
+                state.get("moderator_summary"),
+            )
+            for debater in state["debaters"]
+        ]
+        results = await asyncio.gather(*tasks)
+
+        return {
+            "debate_history": list(results),
             "current_round": current_round + 1,
         }
 
@@ -251,7 +269,7 @@ class DebatePattern:
             "is_settled": False,
         }
 
-        return graph.invoke(initial_state)
+        return asyncio.run(graph.ainvoke(initial_state))
 
     # ------------------------------------------------------------------
     # Helpers

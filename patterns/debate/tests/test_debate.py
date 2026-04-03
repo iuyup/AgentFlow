@@ -3,6 +3,7 @@
 All tests mock ChatOpenAI so they run without an API key.
 """
 
+import asyncio
 from unittest.mock import MagicMock
 
 import pytest
@@ -125,10 +126,12 @@ def test_build_graph_with_custom_llm(two_debaters: list[dict]) -> None:
 
 def test_debate_round_two_debaters(two_debaters: list[dict]) -> None:
     """A single debate round produces one argument per debater."""
+    from unittest.mock import AsyncMock
+
+    msg = make_ai_message("This is my carefully reasoned argument.")
     mock_llm = MagicMock()
-    mock_llm.invoke.return_value = make_ai_message(
-        "This is my carefully reasoned argument."
-    )
+    mock_llm.invoke.return_value = msg
+    mock_llm.ainvoke = AsyncMock(return_value=msg)
 
     pattern = DebatePattern(llm=mock_llm, max_rounds=3)
     state: DebateState = {
@@ -142,7 +145,7 @@ def test_debate_round_two_debaters(two_debaters: list[dict]) -> None:
         "is_settled": False,
     }
 
-    result = pattern._debate_round(state)
+    result = asyncio.run(pattern._debate_round(state))
 
     # Should have 2 new entries (one per debater)
     assert len(result["debate_history"]) == 2
@@ -157,8 +160,12 @@ def test_debate_round_two_debaters(two_debaters: list[dict]) -> None:
 
 def test_debate_round_three_debaters(three_debaters: list[dict]) -> None:
     """Three debaters each contribute one argument per round."""
+    from unittest.mock import AsyncMock
+
+    msg = make_ai_message("Argument content.")
     mock_llm = MagicMock()
-    mock_llm.invoke.return_value = make_ai_message("Argument content.")
+    mock_llm.invoke.return_value = msg
+    mock_llm.ainvoke = AsyncMock(return_value=msg)
 
     pattern = DebatePattern(llm=mock_llm, max_rounds=3)
     state: DebateState = {
@@ -174,7 +181,7 @@ def test_debate_round_three_debaters(three_debaters: list[dict]) -> None:
         "is_settled": False,
     }
 
-    result = pattern._debate_round(state)
+    result = asyncio.run(pattern._debate_round(state))
 
     assert len(result["debate_history"]) == 3
     assert result["current_round"] == 2
@@ -187,8 +194,12 @@ def test_debate_round_llm_receives_system_and_user_messages(
     two_debaters: list[dict]
 ) -> None:
     """The LLM is invoked with a SystemMessage and a HumanMessage."""
+    from unittest.mock import AsyncMock
+
+    msg = make_ai_message("response")
     mock_llm = MagicMock()
-    mock_llm.invoke.return_value = make_ai_message("response")
+    mock_llm.invoke.return_value = msg
+    mock_llm.ainvoke = AsyncMock(return_value=msg)
 
     pattern = DebatePattern(llm=mock_llm)
     state: DebateState = {
@@ -202,12 +213,12 @@ def test_debate_round_llm_receives_system_and_user_messages(
         "is_settled": False,
     }
 
-    pattern._debate_round(state)
+    asyncio.run(pattern._debate_round(state))
 
     # Should be called once per debater
-    assert mock_llm.invoke.call_count == 2
+    assert mock_llm.ainvoke.call_count == 2
 
-    for call_args in mock_llm.invoke.call_args_list:
+    for call_args in mock_llm.ainvoke.call_args_list:
         messages = call_args[0][0]  # positional args
         # First message should be a SystemMessage
         assert messages[0].__class__.__name__ == "SystemMessage"
@@ -317,22 +328,33 @@ def test_should_continue_needs_more(base_state: DebateState) -> None:
 
 def test_full_graph_execution_two_debaters_settled(two_debaters: list[dict]) -> None:
     """Full graph runs and reaches settlement after one round."""
+    from unittest.mock import AsyncMock
+
     mock_llm = MagicMock()
     call_count = [0]
 
-    def side_effect(messages):
+    async def async_side_effect(messages):
         call_count[0] += 1
-        # First 2 calls: debate round (one per debater)
         if call_count[0] <= 2:
             return make_ai_message("Opening argument from debater.")
-        # 3rd call: moderator
         return make_ai_message(
             "SUMMARY: Both sides agree on key points.\n"
             "STATUS: SETTLED\n"
             "DECISION: Proceed with the investment with safeguards."
         )
 
-    mock_llm.invoke.side_effect = side_effect
+    def sync_side_effect(messages):
+        call_count[0] += 1
+        if call_count[0] <= 2:
+            return make_ai_message("Opening argument from debater.")
+        return make_ai_message(
+            "SUMMARY: Both sides agree on key points.\n"
+            "STATUS: SETTLED\n"
+            "DECISION: Proceed with the investment with safeguards."
+        )
+
+    mock_llm.invoke.side_effect = sync_side_effect
+    mock_llm.ainvoke = AsyncMock(side_effect=async_side_effect)
 
     pattern = DebatePattern(llm=mock_llm, max_rounds=3)
     result = pattern.run(
@@ -350,13 +372,23 @@ def test_full_graph_execution_max_rounds_reached(
     two_debaters: list[dict],
 ) -> None:
     """Graph runs for max_rounds even if not settled."""
+    from unittest.mock import AsyncMock
 
     call_count = [0]
 
-    def side_effect(messages):
+    async def async_side_effect(messages):
         call_count[0] += 1
-        # Moderator always says continue until max rounds
-        if call_count[0] <= 5:  # 2 debaters * 2 rounds + 1 moderator per round
+        if call_count[0] <= 5:
+            return make_ai_message(
+                "SUMMARY: Debate continues.\nSTATUS: CONTINUE\n"
+            )
+        return make_ai_message(
+            "SUMMARY: Final round reached.\nSTATUS: CONTINUE\n"
+        )
+
+    def sync_side_effect(messages):
+        call_count[0] += 1
+        if call_count[0] <= 5:
             return make_ai_message(
                 "SUMMARY: Debate continues.\nSTATUS: CONTINUE\n"
             )
@@ -365,7 +397,8 @@ def test_full_graph_execution_max_rounds_reached(
         )
 
     mock_llm = MagicMock()
-    mock_llm.invoke.side_effect = side_effect
+    mock_llm.invoke.side_effect = sync_side_effect
+    mock_llm.ainvoke = AsyncMock(side_effect=async_side_effect)
 
     pattern = DebatePattern(llm=mock_llm, max_rounds=2)
     result = pattern.run(
