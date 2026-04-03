@@ -40,16 +40,16 @@ AgentFlow gives you **proven patterns** you can study, adapt, and combine — ea
 
 | Pattern | Description | Key Technique | Status |
 |---------|-------------|---------------|--------|
-| [Reflection](web/docs/patterns/reflection/) | Iterative self-improvement through write → review loops | Conditional looping | ✅ |
-| [Debate](web/docs/patterns/debate/) | Multi-perspective deliberation with moderator synthesis | N-party coordination | ✅ |
-| [MapReduce](web/docs/patterns/map_reduce/) | Parallel fan-out processing with result aggregation | LangGraph Send API | ✅ |
-| [Hierarchical](web/docs/patterns/hierarchical/) | Manager decomposes tasks → Workers execute → Manager aggregates | Nested subgraphs + Send | ✅ |
-| [Voting](web/docs/patterns/voting/) | Multiple agents independently vote, then aggregate | Broadcast fan-out | ✅ |
-| [GuardRail](web/docs/patterns/guardrail/) | Primary agent + safety guard checkpoint | Approve/block/redirect routing | ✅ |
-| [RAG-Agent](web/docs/patterns/rag_agent/) | Agent decides when to retrieve from knowledge base | Conditional retrieval loop | ✅ |
-| [Chain-of-Experts](web/docs/patterns/chain_of_experts/) | Task passes through specialized agents in sequence | Sequential routing | ✅ |
-| [Human-in-the-Loop](web/docs/patterns/human_in_the_loop/) | Key nodes wait for human confirmation | Interrupt + resume | ✅ |
-| [Swarm](web/docs/patterns/swarm/) | Decentralized multi-agent collaboration | Dynamic orchestration | ✅ |
+| [Reflection](patterns/reflection/) | Iterative self-improvement through write → review loops | Conditional looping | ✅ |
+| [Debate](patterns/debate/) | Multi-perspective deliberation with moderator synthesis | N-party coordination | ✅ |
+| [MapReduce](patterns/map_reduce/) | Parallel fan-out processing with result aggregation | LangGraph Send API | ✅ |
+| [Hierarchical](patterns/hierarchical/) | Manager decomposes tasks → Workers execute → Manager aggregates | Nested subgraphs + Send | ✅ |
+| [Voting](patterns/voting/) | Multiple agents independently vote, then aggregate | Broadcast fan-out | ✅ |
+| [GuardRail](patterns/guardrail/) | Primary agent + safety guard checkpoint | Approve/block/redirect routing | ✅ |
+| [RAG-Agent](patterns/rag_agent/) | Agent decides when to retrieve from knowledge base | Conditional retrieval loop | ✅ |
+| [Chain-of-Experts](patterns/chain_of_experts/) | Task passes through specialized agents in sequence | Sequential routing | ✅ |
+| [Human-in-the-Loop](patterns/human_in_the_loop/) | Key nodes wait for human confirmation | Interrupt + resume | ✅ |
+| [Swarm](patterns/swarm/) | Decentralized multi-agent collaboration | Dynamic orchestration | ✅ |
 
 ## Quick Start
 
@@ -106,7 +106,7 @@ patterns/                  # Core: one directory per pattern
 │   ├── mkdocs.yml        # Site configuration
 │   └── sync_docs.py      # Pattern doc sync script
 ├── benchmarks/            # Performance comparison framework
-└── tasks/                 # Progress tracking
+└── docs/                  # Architecture diagrams & assets
 ```
 
 ## Documentation Site
