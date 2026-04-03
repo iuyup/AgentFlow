@@ -17,7 +17,7 @@ from agentflow.utils import get_llm_call_count
 from langchain_core.callbacks import BaseCallbackHandler
 
 import re
-from typing import Literal, TypedDict
+from typing import Callable, Literal, TypedDict
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -109,6 +109,13 @@ def _retrieve_docs(doc_ids: list[str]) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Retriever type
+# ---------------------------------------------------------------------------
+
+RetrieverFunc = Callable[[list[str]], list[dict]]
+
+
+# ---------------------------------------------------------------------------
 # Pattern implementation
 # ---------------------------------------------------------------------------
 
@@ -129,9 +136,11 @@ class RAGAgentPattern:
         llm: BaseChatModel | None = None,
         max_retrievals: int = 3,
         counter_handler: BaseCallbackHandler | None = None,
+        retriever: RetrieverFunc | None = None,
     ) -> None:
         self.llm = llm or _default_llm(model, counter_handler)
         self.max_retrievals = max_retrievals
+        self.retriever = retriever or _retrieve_docs
 
     # -- Graph nodes -------------------------------------------------------
 
@@ -232,7 +241,7 @@ class RAGAgentPattern:
         current_round_docs = queue[0]
         remaining_queue = queue[1:]
 
-        docs = _retrieve_docs(current_round_docs)
+        docs = self.retriever(current_round_docs)
 
         result: dict = {
             "retrieved_docs": docs,

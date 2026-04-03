@@ -281,6 +281,47 @@ class TestSynthesizeNode:
         assert "Python" in human_content
 
 
+class TestRetrieverInjection:
+    """Verify custom retriever can be injected and is called correctly."""
+
+    def test_custom_retriever_is_called(self) -> None:
+        mock_llm = _make_mock_llm()
+        custom_retriever = MagicMock(return_value=[
+            {"doc_id": "custom1", "content": "Custom doc content."}
+        ])
+        pattern = RAGAgentPattern(llm=mock_llm, retriever=custom_retriever)
+        pattern._fetch({
+            "query": "Q",
+            "retrieved_docs": [],
+            "agent_reasoning": [],
+            "response": "",
+            "retrieval_count": 0,
+            "max_retrievals": 3,
+            "decision": "retrieve",
+            "pending_doc_queue": [["custom1"]],
+        })
+        custom_retriever.assert_called_once_with(["custom1"])
+
+    def test_custom_retriever_docs_in_result(self) -> None:
+        mock_llm = _make_mock_llm()
+        custom_retriever = MagicMock(return_value=[
+            {"doc_id": "custom1", "content": "Custom doc content."}
+        ])
+        pattern = RAGAgentPattern(llm=mock_llm, retriever=custom_retriever)
+        output = pattern._fetch({
+            "query": "Q",
+            "retrieved_docs": [],
+            "agent_reasoning": [],
+            "response": "",
+            "retrieval_count": 0,
+            "max_retrievals": 3,
+            "decision": "retrieve",
+            "pending_doc_queue": [["custom1"]],
+        })
+        assert output["retrieved_docs"][0]["doc_id"] == "custom1"
+        assert output["retrieved_docs"][0]["content"] == "Custom doc content."
+
+
 class TestFullGraphExecution:
     """End-to-end test running the compiled graph with a mock LLM."""
 

@@ -18,7 +18,15 @@ from patterns.rag_agent.pattern import RAGAgentPattern
 
 
 def main() -> None:
+    # Default: uses built-in mock documents for demonstration.
     pattern = RAGAgentPattern(max_retrievals=3)
+
+    # To use your own retriever, pass a callable with signature:
+    #   Callable[[list[str]], list[dict]]
+    # def my_retriever(doc_ids: list[str]) -> list[dict]:
+    #     # e.g., query your vector DB (Pinecone, Weaviate, Chroma, etc.)
+    #     return [{"doc_id": id, "content": "...", "score": 0.9} for id in doc_ids]
+    # pattern = RAGAgentPattern(max_retrievals=3, retriever=my_retriever)
 
     queries = [
         "What is Python and when was it created?",
