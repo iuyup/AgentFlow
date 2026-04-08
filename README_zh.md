@@ -99,7 +99,8 @@ patterns/                  # 核心：每个模式一个子目录
 │   ├── rag_agent/         # Agent + 条件检索
 │   ├── chain_of_experts/  # 顺序专家路由
 │   ├── human_in_the_loop/ # 人工中断
-│   └── swarm/             # 去中心化编排
+│   ├── swarm/             # 去中心化编排
+|   └── self_improving/    # 自我迭代
 ├── agentflow/             # 核心工具函数
 ├── web/                   # 文档网站 (MkDocs)
 │   ├── docs/             # 文档源文件

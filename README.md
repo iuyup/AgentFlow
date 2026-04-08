@@ -100,7 +100,8 @@ patterns/                  # Core: one directory per pattern
 │   ├── rag_agent/         # Agent with conditional retrieval
 │   ├── chain_of_experts/  # Sequential expert routing
 │   ├── human_in_the_loop/ # Human interruption
-│   └── swarm/             # Decentralized orchestration
+│   ├── swarm/             # Decentralized orchestration
+|   └── self_improving/    # Self iteration 
 ├── agentflow/             # Core utilities
 ├── web/                   # Documentation site (MkDocs)
 │   ├── docs/             # Documentation source
