@@ -139,7 +139,7 @@ description: Multi-Agent Collaboration Design Patterns with LangGraph
 
 # AgentFlow
 
-基于 LangGraph 的多 Agent 协作设计模式实战库，提供 10+ 种经过验证的模式，每个模式都有完整代码、架构图、适用场景分析和性能对比。
+基于 LangGraph 的多 Agent 协作设计模式实战库，提供 11 种经过验证的模式，每个模式都有完整代码、架构图、适用场景分析和性能对比。
 
 ## Quick Decision Tree
 
@@ -176,11 +176,14 @@ flowchart TD
     Q9-- No --> Q10{Does it need<br/>voting/coordination?}
 
     Q10-- Yes --> Vot["🗳️ Voting"]
-    Q10-- No --> Swarm["🐝 Swarm"]
+    Q10-- No --> Q11{Does it need<br/>cross-task learning?}
+
+    Q11-- Yes --> SI["🧠 Self-Improving"]
+    Q11-- No --> Swarm["🐝 Swarm"]
 
     class Start terminal
-    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10 decision
-    class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard pattern
+    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11 decision
+    class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard,SI pattern
 
     click Hitl href "/patterns/human_in_the_loop/"
     click RAG href "/patterns/rag_agent/"
@@ -192,6 +195,7 @@ flowchart TD
     click Vot href "/patterns/voting/"
     click Swarm href "/patterns/swarm/"
     click Guard href "/patterns/guardrail/"
+    click SI href "/patterns/self_improving/"
 ```
 
 _Click a pattern name to jump to its documentation_
@@ -270,6 +274,13 @@ _Click a pattern name to jump to its documentation_
 <p class="pattern-links"><a href="patterns/swarm/">English</a> | <a href="patterns/swarm_zh/">中文</a></p>
 </div>
 
+<div class="pattern-card">
+
+<h3>自我改进 (Self-Improving)</h3>
+<p class="pattern-desc">持久化技能库 + 跨任务学习</p>
+<p class="pattern-links"><a href="patterns/self_improving/">English</a> | <a href="patterns/self_improving_zh/">中文</a></p>
+</div>
+
 </div>
 
 ## Quick Start
@@ -282,7 +293,7 @@ pip install agentflow
 echo "OPENAI_API_KEY=sk-..." > .env
 
 # 3. 运行示例
-python -m agentflow.patterns.reflection.example
+python -m patterns.reflection.example
 ```
 
 ## Compare Patterns
@@ -334,6 +345,10 @@ python -m agentflow.patterns.reflection.example
 <tr>
 <td>需要去中心化协作</td>
 <td><a href="patterns/swarm_zh/">群体智能</a></td>
+</tr>
+<tr>
+<td>需要跨任务学习和持久技能</td>
+<td><a href="patterns/self_improving_zh/">自我改进</a></td>
 </tr>
 </tbody>
 </table>

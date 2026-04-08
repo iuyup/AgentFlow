@@ -76,6 +76,7 @@ nav:
     - patterns/chain_of_experts.md
     - patterns/human_in_the_loop.md
     - patterns/swarm.md
+    - patterns/self_improving.md
   - 模式（中文）:
     - patterns/reflection_zh.md
     - patterns/debate_zh.md
@@ -87,6 +88,7 @@ nav:
     - patterns/chain_of_experts_zh.md
     - patterns/human_in_the_loop_zh.md
     - patterns/swarm_zh.md
+    - patterns/self_improving_zh.md
   - Guide:
     - guide/index.md
     - guide/getting-started.md

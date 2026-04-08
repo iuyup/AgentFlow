@@ -40,11 +40,14 @@ flowchart TD
     Q9-- 否 --> Q10{是否需要<br/>投票决策？}
     
     Q10-- 是 --> Vot["🗳️ Voting<br/>投票决策"]
-    Q10-- 否 --> Swarm["🐝 Swarm<br/>群体智能"]
-    
+    Q10-- 否 --> Q11{是否需要<br/>跨任务学习？}
+
+    Q11-- 是 --> SI["🧠 Self-Improving<br/>自我改进"]
+    Q11-- 否 --> Swarm["🐝 Swarm<br/>群体智能"]
+
     class Start terminal
-    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10 decision
-    class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard pattern
+    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11 decision
+    class Hitl,RAG,Refl,CoE,Single,Hier,MR,Deb,Vot,Swarm,Guard,SI pattern
     
     click Hitl href "/patterns/human_in_the_loop_zh/"
     click RAG href "/patterns/rag_agent_zh/"
@@ -56,6 +59,7 @@ flowchart TD
     click Vot href "/patterns/voting_zh/"
     click Swarm href "/patterns/swarm_zh/"
     click Guard href "/patterns/guardrail_zh/"
+    click SI href "/patterns/self_improving_zh/"
 ```
 
 _点击模式名称可跳转到对应中文文档_
@@ -72,3 +76,4 @@ _点击模式名称可跳转到对应中文文档_
 | 需要专家依次处理 | [专家链](../patterns/chain_of_experts_zh.md) | 专业化分工，顺序传递 |
 | 需要人类介入确认 | [人机协作](../patterns/human_in_the_loop_zh.md) | 关键节点，人工审批 |
 | 需要去中心化协作 | [群体智能](../patterns/swarm_zh.md) | 动态协调，自组织 |
+| 需要跨任务学习和持久技能 | [自我改进](../patterns/self_improving_zh.md) | 持久化技能库，跨任务自我改进 |
