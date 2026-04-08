@@ -10,6 +10,7 @@ from patterns.rag_agent import RAGAgentPattern
 from patterns.human_in_the_loop import HumanInTheLoopPattern
 from patterns.chain_of_experts import ChainOfExpertsPattern
 from patterns.swarm import SwarmPattern
+from patterns.self_improving import SelfImprovingPattern
 
 __all__ = [
     "ReflectionPattern",
@@ -22,4 +23,5 @@ __all__ = [
     "HumanInTheLoopPattern",
     "ChainOfExpertsPattern",
     "SwarmPattern",
+    "SelfImprovingPattern",
 ]

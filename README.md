@@ -50,6 +50,7 @@ AgentFlow gives you **proven patterns** you can study, adapt, and combine — ea
 | [Chain-of-Experts](patterns/chain_of_experts/) | Task passes through specialized agents in sequence | Sequential routing | ✅ |
 | [Human-in-the-Loop](patterns/human_in_the_loop/) | Key nodes wait for human confirmation | Interrupt + resume | ✅ |
 | [Swarm](patterns/swarm/) | Decentralized multi-agent collaboration | Dynamic orchestration | ✅ |
+| [Self-Improving](patterns/self_improving/) | Persistent skill library + cross-task learning | Layered memory + progressive disclosure | ✅ |
 
 ## Quick Start
 

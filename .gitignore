@@ -50,3 +50,9 @@ tasks/todo.md
 
 # Personal notes
 千星GitHub项目策略分析.md
+
+# Agent memory & skill stores (user data - do not commit)
+.agent_memory/
+.demo_agent_memory/
+.demo_self_improving_memory/
+*.agent_memory/

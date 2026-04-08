@@ -21,6 +21,7 @@ PATTERNS = [
     "chain_of_experts",
     "human_in_the_loop",
     "swarm",
+    "self_improving",
 ]
 
 

@@ -50,6 +50,7 @@ AgentFlow 提供 **经过验证的模式**，你可以学习、改造、组合 �
 | [Chain-of-Experts（专家链）](patterns/chain_of_experts/) | 任务在专家 Agent 间依次传递 | 顺序路由 | ✅ |
 | [Human-in-the-Loop（人机协作）](patterns/human_in_the_loop/) | 关键节点等待人类确认 | 中断 + 恢复 | ✅ |
 | [Swarm（群体智能）](patterns/swarm/) | 去中心化 Agent 群体协作 | 动态编排 | ✅ |
+| [Self-Improving（自我改进）](patterns/self_improving/) | 持久技能库 + 跨任务自我改进 | 分层记忆 + 渐进式披露 | ✅ |
 
 ## 快速开始
 

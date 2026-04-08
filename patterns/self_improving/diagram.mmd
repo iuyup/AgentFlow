@@ -1,0 +1,18 @@
+flowchart TD
+    A([START]) --> B["router\n— Classify task & look up skills —"]
+    B --> C["executor\n— Run task (optionally guided by skill) —"]
+    C --> D["evaluator\n— Score 1–10 & route —"]
+    D -- "score≥7 ∧ steps≥3 ∧ no skill used" --> E["skill_extractor\n— Distil reusable skill —"]
+    D -- "task_count % N == 0" --> F["memory_updater\n— Consolidate hot memory —"]
+    D -- "otherwise" --> G([END])
+    E --> F
+    E --> G
+    F --> G
+
+    style A fill:#2d6a4f,color:#fff
+    style B fill:#264653,color:#fff
+    style C fill:#264653,color:#fff
+    style D fill:#e76f51,color:#fff
+    style E fill:#e9c46a,color:#000
+    style F fill:#e9c46a,color:#000
+    style G fill:#2d6a4f,color:#fff
